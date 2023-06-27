@@ -3003,7 +3003,7 @@ PrefabInstance:
     - target: {fileID: 5978366307871486188, guid: be0b1ae53b0147848964256414e56709, type: 3}
       propertyPath: moveList.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: ae083e99d3549c44e9c83e58f7810e02, type: 2}
+      objectReference: {fileID: 11400000, guid: fd8a4906895fc2d42ada996318a22572, type: 2}
     - target: {fileID: 5978366307871486188, guid: be0b1ae53b0147848964256414e56709, type: 3}
       propertyPath: moveList.Array.data[3]
       value: 

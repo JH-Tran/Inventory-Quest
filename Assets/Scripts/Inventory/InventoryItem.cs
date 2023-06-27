@@ -45,10 +45,11 @@ public class InventoryItem : MonoBehaviour
         Debug.Log($"Created {inventoryItemData.name}");
         data = inventoryItemData;
         GetComponent<Image>().sprite = inventoryItemData.icon;
-        Vector2 size = new Vector2();
+/*        Vector2 size = new Vector2();
         size.x = data.width * GridManager.tileSizeWidth;
         size.y = data.height * GridManager.tileSizeHeight;
-        GetComponent<RectTransform>().sizeDelta = size;
+        GetComponent<RectTransform>().sizeDelta = size;*/
+        GetComponent<RectTransform>().localScale = new Vector2(1, 1);
     }
 
     internal void Rotate()

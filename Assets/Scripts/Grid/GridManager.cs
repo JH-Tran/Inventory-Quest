@@ -70,7 +70,7 @@ public class GridManager : MonoBehaviour
 
         tileGridPosition.x = (int)(positionOnTheGrid.x / (tileSizeWidth * rootCanvas.scaleFactor));
         tileGridPosition.y = (int)(positionOnTheGrid.y / (tileSizeHeight * rootCanvas.scaleFactor));
-        Debug.Log(tileGridPosition);
+        //Debug.Log(tileGridPosition);
         return tileGridPosition;
     }
     internal Vector2Int? FindSpaceForObject(InventoryItem itemToInsert)

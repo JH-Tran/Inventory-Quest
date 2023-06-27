@@ -206,6 +206,9 @@ public class BattleSystem : MonoBehaviour
         hideActionMoveMenu();
         MoveManager(playerUnit.moveList[3]);
     }
+
+    //MOVES TO IMPLEMENT
+    //BUFF && DEBUFF
     private void MoveManager(MovesData moveData)
     {
         if (moveData == null)
@@ -214,23 +217,59 @@ public class BattleSystem : MonoBehaviour
             return;
         }
         SetDialogueText(true, "");
+        Debug.Log($"Game turn: {state}");
 
         if (state == BattleState.PLAYERTURN)
         {
             switch (moveData.moveType)
             {
                 case MoveType.NONE:
-                    Debug.Log("move data: NONE");
                     Debug.Log("ERROR: No move assigned");
                     break;
                 case MoveType.PHYSICAL:
                     Debug.Log("move data: PHYSICAL");
                     //Type, power, accuracy
-                    StartCoroutine(UnitPhysicalAttack(playerUnit, enemyUnit, moveData));
+                    StartCoroutine(UnitAttack(playerUnit, enemyUnit, moveData));
                     break;
                 case MoveType.SPECIAL:
                     Debug.Log("move data: SPECIAL");
-                    StartCoroutine(UnitSpecialAttack(moveData));
+                    StartCoroutine(UnitAttack(playerUnit, enemyUnit, moveData));
+                    //Type, power, accuracy
+                    break;
+                case MoveType.BUFF:
+                    Debug.Log("move data: BUFF");
+                    playerUnit.HealUnit(10);
+                    playerHUD.SetHP(playerUnit);
+                    state = BattleState.ENEMYTURN;
+                    StartCoroutine(EnemyTurn());
+                    //Type, status, accuracy
+                    break;
+                case MoveType.DEBUFF:
+                    Debug.Log("move data: DEBUFF");
+                    //Type, status, accuracy
+                    break;
+                case MoveType.STATUS:
+                    Debug.Log("move data: STATUS");
+                    //Type, status, accuracy
+                    ApplyStaticEffect(playerUnit, enemyUnit, moveData.moveName, moveData.elementalType, moveData.statusEffect, moveData.statusAccuracy);
+                    break;
+            }
+        }
+        else if (state == BattleState.ENEMYTURN)
+        {
+            switch (moveData.moveType)
+            {
+                case MoveType.NONE:
+                    Debug.Log("ERROR: No move assigned.");
+                    break;
+                case MoveType.PHYSICAL:
+                    Debug.Log("move data: PHYSICAL");
+                    //Type, power, accuracy
+                    StartCoroutine(UnitAttack(enemyUnit, playerUnit, moveData));
+                    break;
+                case MoveType.SPECIAL:
+                    Debug.Log("move data: SPECIAL");
+                    StartCoroutine(UnitAttack(enemyUnit, playerUnit,moveData));
                     //Type, power, accuracy
                     break;
                 case MoveType.BUFF:
@@ -247,7 +286,7 @@ public class BattleSystem : MonoBehaviour
                 case MoveType.STATUS:
                     Debug.Log("move data: STATUS");
                     //Type, status, accuracy
-                    ApplyStaticEffect(playerUnit, enemyUnit, moveData.moveName, moveData.elementalType, moveData.statusEffect, moveData.statusAccuracy);
+                    ApplyStaticEffect(enemyUnit, playerUnit, moveData.moveName, moveData.elementalType, moveData.statusEffect, moveData.statusAccuracy);
                     break;
             }
         }
@@ -266,16 +305,16 @@ public class BattleSystem : MonoBehaviour
                 StartCoroutine(UnitBurn(unitAttacking, unitDefending, moveName, isStatusApplied));
                 break;
             case StatusEffect.POISON:
-                StartCoroutine(PlayerPoison(moveName, isStatusApplied));
+                StartCoroutine(UnitPoison(unitAttacking, unitDefending, moveName, isStatusApplied));
                 break;
             case StatusEffect.SLEEP:
-                StartCoroutine(PlayerSleep(moveName, isStatusApplied));
+                StartCoroutine(UnitSleep(unitAttacking, unitDefending, moveName, isStatusApplied));
                 break;
             case StatusEffect.FROZEN:
-                StartCoroutine(PlayerFrozen(moveName, isStatusApplied));
+                StartCoroutine(UnitFrozen(unitAttacking, unitDefending, moveName, isStatusApplied));
                 break;
             case StatusEffect.PARALYSIS:
-                StartCoroutine(PlayerParalysis(moveName, isStatusApplied));
+                StartCoroutine(UnitParalysis(unitAttacking, unitDefending, moveName, isStatusApplied));
                 break;
         }
     }
@@ -286,20 +325,17 @@ public class BattleSystem : MonoBehaviour
         yield return new WaitForSeconds(2f);
         if (isStatusApplied)
         {
-            dialogue.text = $"{unitDefending.unitData.displayName} has been burned!";
-            //Debug.Log("Dialogue Updated to burn effect");
-            yield return new WaitForSeconds(2f);
             enemyHUD.UpdateStatusEffect(enemyUnit);
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
+            playerHUD.UpdateStatusEffect(playerUnit);
+            dialogue.text = $"{unitDefending.unitData.displayName} has been burned!";
         }
         else
         {
-            if (enemyUnit.GetUnitStatusEffect() == StatusEffect.BURN)
+            if (unitDefending.GetUnitStatusEffect() == StatusEffect.BURN)
             {
                 dialogue.text = $"{unitDefending.unitData.displayName} is already burned!";
             }
-            else if (enemyUnit.GetUnitStatusEffect() != StatusEffect.NONE)
+            else if (unitDefending.GetUnitStatusEffect() != StatusEffect.NONE)
             {
                 dialogue.text = $"{unitDefending.unitData.displayName} cannot have more than one status effects!";
             }
@@ -307,189 +343,159 @@ public class BattleSystem : MonoBehaviour
             {
                 dialogue.text = $"{unitAttacking.unitData.displayName} missed!";
             }
-            yield return new WaitForSeconds(2f);
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
         }
+        yield return new WaitForSeconds(2f);
+        PassTurn(false);
     }
-    IEnumerator PlayerPoison(string moveName, bool isStatusApplied)
+    IEnumerator UnitPoison(UnitInstance unitAttacking, UnitInstance unitDefending, string moveName, bool isStatusApplied)
     {
-        dialogue.text = $"You used {moveName}!";
+        dialogue.text = $"{unitAttacking.unitData.displayName} used {moveName}!";
         yield return new WaitForSeconds(2f);
         if (isStatusApplied)
         {
             enemyHUD.UpdateStatusEffect(enemyUnit);
-            dialogue.text = $"{enemyUnit.name} has been poisoned!";
-            //Debug.Log("Dialogue Updated to burn effect");
-            yield return new WaitForSeconds(2f);
-            enemyHUD.UpdateStatusEffect(enemyUnit);
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
+            playerHUD.UpdateStatusEffect(playerUnit);
+            dialogue.text = $"{unitDefending} has been poisoned!";
         }
         else
         {
-            if (enemyUnit.GetUnitStatusEffect() == StatusEffect.POISON)
+            if (unitDefending.GetUnitStatusEffect() == StatusEffect.POISON)
             {
-                dialogue.text = $"{enemyUnit.name} is already poisoned!";
+                dialogue.text = $"{unitDefending.unitData.displayName} is already poisoned!";
             }
-            else if (enemyUnit.GetUnitStatusEffect() != StatusEffect.NONE)
+            else if (unitDefending.GetUnitStatusEffect() != StatusEffect.NONE)
             {
-                dialogue.text = $"{enemyUnit.name} cannot have 2 status effects!";
+                dialogue.text = $"{unitDefending.unitData.displayName} cannot have 2 status effects!";
             }
             else
             {
-                dialogue.text = $"You missed!";
+                dialogue.text = $"{unitAttacking.unitData.displayName} missed!";
             }
-            yield return new WaitForSeconds(2f);
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
         }
+        yield return new WaitForSeconds(2f);
+        PassTurn(false);
     }
-    IEnumerator PlayerSleep(string moveName, bool isStatusApplied)
+    IEnumerator UnitSleep(UnitInstance unitAttacking, UnitInstance unitDefending, string moveName, bool isStatusApplied)
     {
-        dialogue.text = $"You used {moveName}!";
+        dialogue.text = $"{unitAttacking.unitData.displayName} used {moveName}!";
         yield return new WaitForSeconds(2f);
         if (isStatusApplied)
         {
             enemyHUD.UpdateStatusEffect(enemyUnit);
-            dialogue.text = $"{enemyUnit.name} fell asleep!";
-            //Debug.Log("Dialogue Updated to burn effect");
-            yield return new WaitForSeconds(2f);
-            enemyHUD.UpdateStatusEffect(enemyUnit);
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
+            playerHUD.UpdateStatusEffect(playerUnit);
+            dialogue.text = $"{unitDefending.name} fell asleep!";
         }
         else
         {
-            if (enemyUnit.GetUnitStatusEffect() != StatusEffect.SLEEP)
+            if (unitDefending.GetUnitStatusEffect() != StatusEffect.SLEEP)
             {
-                dialogue.text = $"{enemyUnit.name} is already asleep!";
+                dialogue.text = $"{unitDefending.unitData.displayName} is already asleep!";
             }
-            else if (enemyUnit.GetUnitStatusEffect() != StatusEffect.NONE)
+            else if (unitDefending.GetUnitStatusEffect() != StatusEffect.NONE)
             {
-                dialogue.text = $"{enemyUnit.name} cannot have 2 status effects!";
+                dialogue.text = $"{unitDefending.unitData.displayName} cannot have 2 status effects!";
             }
             else
             {
-                dialogue.text = $"You missed!";
+                dialogue.text = $"{unitAttacking.unitData.displayName} missed!";
             }
-            yield return new WaitForSeconds(2f);
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
         }
+        yield return new WaitForSeconds(2f);
+        PassTurn(false);
     }
-    IEnumerator PlayerFrozen(string moveName, bool isStatusApplied)
+    IEnumerator UnitFrozen(UnitInstance unitAttacking, UnitInstance unitDefending, string moveName, bool isStatusApplied)
     {
-        dialogue.text = $"You used {moveName}!";
+        dialogue.text = $"{unitAttacking.unitData.displayName} used {moveName}!";
         yield return new WaitForSeconds(2f);
         if (isStatusApplied)
         {
             enemyHUD.UpdateStatusEffect(enemyUnit);
-            dialogue.text = $"{enemyUnit.name} is frozen solid!";
-            //Debug.Log("Dialogue Updated to burn effect");
-            yield return new WaitForSeconds(2f);
-            enemyHUD.UpdateStatusEffect(enemyUnit);
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
+            playerHUD.UpdateStatusEffect(playerUnit);
+            dialogue.text = $"{unitDefending.unitData.displayName} is frozen solid!";
         }
         else
         {
-            if (enemyUnit.GetUnitStatusEffect() == StatusEffect.FROZEN)
+            if (unitDefending.GetUnitStatusEffect() == StatusEffect.FROZEN)
             {
-                dialogue.text = $"{enemyUnit.name} is already frozen!";
+                dialogue.text = $"{unitDefending.unitData.displayName} is already frozen!";
             }
-            else if (enemyUnit.GetUnitStatusEffect() != StatusEffect.NONE)
+            else if (unitDefending.GetUnitStatusEffect() != StatusEffect.NONE)
             {
-                dialogue.text = $"{enemyUnit.name} cannot have 2 status effects!";
+                dialogue.text = $"{unitDefending.unitData.displayName} cannot have 2 status effects!";
             }
             else
             {
-                dialogue.text = $"You missed!";
+                dialogue.text = $"{unitAttacking.unitData.displayName} missed!";
             }
-            yield return new WaitForSeconds(2f);
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
         }
+        yield return new WaitForSeconds(2f);
+        PassTurn(false);
     }
-    IEnumerator PlayerParalysis(string moveName, bool isStatusApplied)
+    IEnumerator UnitParalysis(UnitInstance unitAttacking, UnitInstance unitDefending, string moveName, bool isStatusApplied)
     {
-        dialogue.text = $"You used {moveName}!";
+        dialogue.text = $"{unitAttacking.unitData.displayName} used {moveName}!";
         yield return new WaitForSeconds(2f);
         if (isStatusApplied)
         {
             enemyHUD.UpdateStatusEffect(enemyUnit);
-            dialogue.text = $"{enemyUnit.name} is paralysed!";
-            //Debug.Log("Dialogue Updated to burn effect");
-            yield return new WaitForSeconds(2f);
-            enemyHUD.UpdateStatusEffect(enemyUnit);
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
+            playerHUD.UpdateStatusEffect(playerUnit);
+            dialogue.text = $"{unitDefending.unitData.displayName} is paralysed!";
         }
         else
         {
             if (enemyUnit.GetUnitStatusEffect() == StatusEffect.PARALYSIS)
             {
-                dialogue.text = $"{enemyUnit.name} is already paralysed!";
+                dialogue.text = $"{unitDefending.unitData.displayName} is already paralysed!";
             }
             else if (enemyUnit.GetUnitStatusEffect() != StatusEffect.NONE)
             {
-                dialogue.text = $"{enemyUnit.name} cannot have 2 status effects!";
+                dialogue.text = $"{unitDefending.unitData.displayName} cannot have 2 status effects!";
             }
             else
             {
-                dialogue.text = $"You missed!";
+                dialogue.text = $"{unitAttacking.unitData.displayName} missed!";
             }
-            yield return new WaitForSeconds(2f);
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
         }
+        yield return new WaitForSeconds(2f);
+        PassTurn(false);
     }
     #endregion
-    IEnumerator UnitPhysicalAttack(UnitInstance unitAttacking, UnitInstance unitDefending, MovesData moveData)
+    IEnumerator UnitAttack(UnitInstance unitAttacking, UnitInstance unitDefending, MovesData moveData)
     {
         dialogue.text = $"{unitAttacking.unitData.displayName} used {moveData.moveName}!";
         yield return new WaitForSeconds(2f);
-        bool isDead = unitAttacking.PhysicalAttack(unitDefending, moveData.elementalType, moveData.power);
+        //IMPLEMENT: Damage dealt to defender unit
+        bool isDead = false;
+        if(moveData.moveType == MoveType.PHYSICAL)
+        {
+            isDead = unitAttacking.PhysicalAttack(unitDefending, moveData.elementalType, moveData.power);
+        }
+        else if (moveData.moveType == MoveType.SPECIAL)
+        {
+            isDead = unitAttacking.SpecialAttack(unitDefending, moveData.elementalType, moveData.power);
+        }
+
         enemyHUD.SetHP(enemyUnit);
-        if (unitAttacking.IsUnitCriticalAttack() == true)
+        playerHUD.SetHP(playerUnit);
+        yield return new WaitForSeconds(2f);
+        ElementEffectiveness MoveEffectivenessToUnitDefending = unitDefending.GetMoveEffectiveness();
+        if (MoveEffectivenessToUnitDefending == ElementEffectiveness.SUPEREFFECTIVE)
+        {
+            dialogue.text = "It was super effective!";
+            yield return new WaitForSeconds(2f);
+        }
+        else if (MoveEffectivenessToUnitDefending == ElementEffectiveness.NOTEFFECTIVE)
+        {
+            dialogue.text = "It was not effective!";
+            yield return new WaitForSeconds(2f);
+        }
+
+        if (unitDefending.IsUnitCriticalAttack() == true)
         {
             dialogue.text = "Critical Hit!";
             yield return new WaitForSeconds(2f);
         }
-        yield return new WaitForSeconds(2f);
-        if (isDead && state == BattleState.PLAYERTURN)
-        {
-            state = BattleState.WON;
-            EndBattle();
-        }
-        else
-        {
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
-        }
-    }
-    IEnumerator UnitSpecialAttack(MovesData moveData)
-    {
-        dialogue.text = $"You used {moveData.moveName}!";
-        yield return new WaitForSeconds(2f);
-        bool isDead = playerUnit.SpecialAttack(enemyUnit, moveData.elementalType, moveData.power);
-        enemyHUD.SetHP(enemyUnit);
-        if (playerUnit.IsUnitCriticalAttack() == true)
-        {
-            dialogue.text = "Critical Hit!";
-            yield return new WaitForSeconds(2f);
-        }
-        yield return new WaitForSeconds(2f);
-        if (isDead)
-        {
-            state = BattleState.WON;
-            EndBattle();
-        }
-        else
-        {
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
-        }
+        PassTurn(isDead);
     }
     IEnumerator EnemyTurn()
     {
@@ -527,16 +533,17 @@ public class BattleSystem : MonoBehaviour
                     EndBattle();
                     yield break;
                 }
-
             }
         }
 
-        dialogue.text = $"{enemyUnit.unitData.displayName} attacks!";
-        yield return new WaitForSeconds(1f);
+        dialogue.text = $"{enemyUnit.unitData.displayName} is thinking!";
+        yield return new WaitForSeconds(2f);
+        MoveManager(enemyUnit.GetRandomMove());
 
-        //Apply status effect to player.
-        /* enemyUnit.ApplyStatusEffect(playerUnit, ElementTypes.FIRE, StatusEffect.BURN, 100);
-        playerHUD.UpdateStatusEffect(playerUnit);*/
+        #region TESTING ENEMIES FUNCTION WITHOUT THEIR MOVESET
+        /*      //Apply status effect to player.
+        *//* enemyUnit.ApplyStatusEffect(playerUnit, ElementTypes.FIRE, StatusEffect.BURN, 100);
+        playerHUD.UpdateStatusEffect(playerUnit);*//*
 
         bool isDead = enemyUnit.PhysicalAttack(playerUnit, ElementTypes.NORMAL, 20);
         playerHUD.SetHP(playerUnit);
@@ -552,7 +559,8 @@ public class BattleSystem : MonoBehaviour
         {
             state = BattleState.PLAYERTURN;
             PlayerTurn();
-        }
+        }*/
+        #endregion
     }
     IEnumerator ReturnToMenu()
     {
@@ -579,7 +587,7 @@ public class BattleSystem : MonoBehaviour
         if (enemyUnit.IsUnitDropReward())
         {
             Debug.Log("GAIN BONUS DROP REWARD");
-            inventoryController.InsertItemInDropGrid(null,enemyUnit.GetDropMoveData());
+            inventoryController.InsertItemInDropGrid(null,enemyUnit.GetRandomMove());
         }
     }
     private void EndBattle()
@@ -598,5 +606,28 @@ public class BattleSystem : MonoBehaviour
     private void UpdateUnitStatusDialogue(UnitInstance unitInstance)
     {
         dialogue.text = $"{unitInstance.GetStatusEffectString()}";
+    }
+    private void PassTurn(bool isDefendingUnitDead)
+    {
+        if (isDefendingUnitDead && state == BattleState.PLAYERTURN)
+        {
+            state = BattleState.WON;
+            EndBattle();
+        }
+        else if (isDefendingUnitDead && state == BattleState.ENEMYTURN)
+        {
+            state = BattleState.LOST;
+            EndBattle();
+        }
+        else if (!isDefendingUnitDead && state == BattleState.PLAYERTURN)
+        {
+            state = BattleState.ENEMYTURN;
+            StartCoroutine(EnemyTurn());
+        }
+        else if (!isDefendingUnitDead && state == BattleState.ENEMYTURN)
+        {
+            state = BattleState.PLAYERTURN;
+            PlayerTurn();
+        }
     }
 }

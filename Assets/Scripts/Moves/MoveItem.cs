@@ -8,7 +8,6 @@ public class MoveItem : MonoBehaviour
 {
     public MovesData moveData;
     public InventoryItem inventoryItem;
-    private RectTransform moveItemRectTransform;
     public TMPro.TextMeshProUGUI moveText;
     private Image moveBackground;
 
@@ -16,7 +15,7 @@ public class MoveItem : MonoBehaviour
     {
         moveBackground = GetComponent<Image>();
         moveText = GetComponentInChildren<TMPro.TextMeshProUGUI>();
-        moveItemRectTransform = GetComponent<RectTransform>();
+        RectTransform moveItemRectTransform = GetComponent<RectTransform>();
         moveItemRectTransform.localScale = new Vector2(1,1);
         if (moveText != null)
         {

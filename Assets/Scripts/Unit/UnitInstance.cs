@@ -31,11 +31,13 @@ public class UnitInstance : MonoBehaviour
     private float superEffectiveMultiplier = 1.5f;
     private float notSuperEffectiveMultiplier = 0.5f;
     private float normalEffectiveMultiplier = 1f;
+    private ElementEffectiveness moveEffectivenessType1 = ElementEffectiveness.NONE;
+    private ElementEffectiveness moveEffectivenessType2 = ElementEffectiveness.NONE;
 
     private int criticalRate = 200;
     private int maxCriticalChance = 1000;
     private float criticalMultiplier = 1.5f;
-    private bool hitCriticalAttack;
+    private bool isDefenderTakeCriticalHit;
 
     public void Awake()
     {
@@ -72,7 +74,7 @@ public class UnitInstance : MonoBehaviour
     }
     public bool IsUnitCriticalAttack()
     {
-        return hitCriticalAttack;
+        return isDefenderTakeCriticalHit;
     }
     public void HealUnit(int heal)
     {
@@ -208,11 +210,17 @@ public class UnitInstance : MonoBehaviour
     }
     public bool TakePhysicalDamage(ElementTypes moveElementType, int attackerAttack, int attackerLevel, int movePower, float burnMultiplier)
     {
-        float calculatedDamage = (((2 * attackerLevel / 5) + 2) * movePower * (attackerAttack / defence) / 50 + 2) * CalculateElementEffectiveMultiplier(moveElementType,unitData.type1) * CalculateCriticalMultiplier() * burnMultiplier;
+        float type1Reaction = CalculateElementEffectiveMultiplier(moveElementType, unitData.type1);
+        moveEffectivenessType1 = SetTypeEffectiveness(type1Reaction);
+        float calculatedDamage = (((2 * attackerLevel / 5) + 2) * movePower * (attackerAttack / defence) / 50 + 2) * type1Reaction * CalculateCriticalMultiplier() * burnMultiplier;
         if (unitData.type2 != ElementTypes.NONE)
         {
-            calculatedDamage *= CalculateElementEffectiveMultiplier(moveElementType, unitData.type2);
+            float type2Reaction = CalculateElementEffectiveMultiplier(moveElementType, unitData.type2);
+            calculatedDamage *= type2Reaction;
+            moveEffectivenessType2 = SetTypeEffectiveness(type2Reaction);
         }
+        Debug.Log($"Damage Calculated {calculatedDamage}");
+        Debug.Log($"Effectiveness for defender has been calculated {moveEffectivenessType1} || {moveEffectivenessType2}");
         if (calculatedDamage > 0)
         {
             currentUnitHealth -= Mathf.FloorToInt (calculatedDamage);
@@ -220,7 +228,8 @@ public class UnitInstance : MonoBehaviour
         }
         else
         {
-            //Debug.Log($"{attackerName} has defended {calculatedDamage} from {unitData.name}");
+            Debug.Log("Minimum amount of damage has been applied.");
+            currentUnitHealth -= 1;
         }
 
         if (currentUnitHealth <= 0)
@@ -233,13 +242,12 @@ public class UnitInstance : MonoBehaviour
     }
     public bool TakeSpecialDamage(ElementTypes moveElementType, int specialAttack, int attackerLevel, int movePower, float burnMultiplier)
     {
-        float calculatedDamage = (((2 * attackerLevel / 5) + 2) * movePower * (specialAttack / spDefence) / 50 + 2) * 
-            CalculateElementEffectiveMultiplier(moveElementType, unitData.type1) * 
-            CalculateCriticalMultiplier() * burnMultiplier;
-
+        float type1Reaction = CalculateElementEffectiveMultiplier(moveElementType, unitData.type1);
+        float calculatedDamage = (((2 * attackerLevel / 5) + 2) * movePower * (specialAttack / spDefence) / 50 + 2) * type1Reaction * CalculateCriticalMultiplier() * burnMultiplier;
         if (unitData.type2 != ElementTypes.NONE)
         {
-            calculatedDamage *= CalculateElementEffectiveMultiplier(moveElementType, unitData.type2);
+            float type2Reaction = CalculateElementEffectiveMultiplier(moveElementType, unitData.type2);
+            calculatedDamage *= type2Reaction;
         }
         if (calculatedDamage >= 1)
         {
@@ -287,16 +295,24 @@ public class UnitInstance : MonoBehaviour
         //If the elements are the same or have neutral reactions
         return normalEffectiveMultiplier;
     }
+    private ElementEffectiveness SetTypeEffectiveness(float effectivenessMultiplier)
+    {
+        if (effectivenessMultiplier == superEffectiveMultiplier)
+            return ElementEffectiveness.SUPEREFFECTIVE;
+        else if (effectivenessMultiplier == notSuperEffectiveMultiplier)
+            return ElementEffectiveness.NOTEFFECTIVE;
+        return ElementEffectiveness.NONE;
+    }
     public float CalculateCriticalMultiplier()
     {
         if (RandomRoller(maxCriticalChance, criticalRate))
         {
             Debug.Log("CRIT!");
-            hitCriticalAttack = true;
+            isDefenderTakeCriticalHit = true;
             return criticalMultiplier;
         }
         Debug.Log("NOT CRIT!");
-        hitCriticalAttack = false;
+        isDefenderTakeCriticalHit = false;
         return 1;
     }
     private bool RandomRoller(int maxRange, int chanceRate)
@@ -317,9 +333,33 @@ public class UnitInstance : MonoBehaviour
     {
         return RandomRoller(100,50);
     }
-    public MovesData GetDropMoveData()
+    public MovesData GetRandomMove()
     {
-        int randomNum = Random.Range(0, unitData.dropMoveList.Count + 1);
+        int randomNum = Random.Range(0, unitData.dropMoveList.Count);
+        Debug.Log(randomNum);
         return unitData.dropMoveList[randomNum];
     }
+    public ElementEffectiveness GetMoveEffectiveness()
+    {
+        //if the unit is mono type just return the type 1 effectiveness.
+        if (unitData.type2 == ElementTypes.NONE) { return moveEffectivenessType1; }
+
+        if (moveEffectivenessType1 == ElementEffectiveness.SUPEREFFECTIVE && moveEffectivenessType2 == ElementEffectiveness.SUPEREFFECTIVE)
+            return ElementEffectiveness.SUPEREFFECTIVE;
+        else if (moveEffectivenessType1 == ElementEffectiveness.NONE)
+            return moveEffectivenessType2;
+        else if (moveEffectivenessType2 == ElementEffectiveness.NONE)
+            return moveEffectivenessType1;
+        else if (moveEffectivenessType1 == ElementEffectiveness.NOTEFFECTIVE && moveEffectivenessType2 == ElementEffectiveness.NOTEFFECTIVE)
+            return ElementEffectiveness.NOTEFFECTIVE;
+        else
+            return ElementEffectiveness.NONE;
+    }
 }
+
+public enum ElementEffectiveness
+{
+    NONE,
+    SUPEREFFECTIVE,
+    NOTEFFECTIVE
+};
