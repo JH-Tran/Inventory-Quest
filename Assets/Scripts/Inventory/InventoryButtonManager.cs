@@ -22,7 +22,7 @@ public class InventoryButtonManager : MonoBehaviour
         gearInventory.SetActive(true);
         movesInventory.SetActive(false);
     }
-    public void OpenInventoryWithDrop()
+    public void OpenInventoryWithDropGrid()
     {
         dropGridGroup.SetActive(true);
         battleBackButton.SetActive(false);

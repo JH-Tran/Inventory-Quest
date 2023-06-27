@@ -11,6 +11,7 @@ public class GridManager : MonoBehaviour
     InventoryItem[,] inventoryItemSlot;
 
     RectTransform rectTransform;
+    [SerializeField] Canvas rootCanvas;
 
     [SerializeField] int gridSizeWidth = 10;
     [SerializeField] int gridSizeHeight = 10;
@@ -67,9 +68,9 @@ public class GridManager : MonoBehaviour
         positionOnTheGrid.x = mousePosition.x - rectTransform.position.x;
         positionOnTheGrid.y = rectTransform.position.y - mousePosition.y;
 
-        tileGridPosition.x = (int)(positionOnTheGrid.x / tileSizeWidth);
-        tileGridPosition.y = (int)(positionOnTheGrid.y / tileSizeHeight);
-
+        tileGridPosition.x = (int)(positionOnTheGrid.x / (tileSizeWidth * rootCanvas.scaleFactor));
+        tileGridPosition.y = (int)(positionOnTheGrid.y / (tileSizeHeight * rootCanvas.scaleFactor));
+        Debug.Log(tileGridPosition);
         return tileGridPosition;
     }
     internal Vector2Int? FindSpaceForObject(InventoryItem itemToInsert)

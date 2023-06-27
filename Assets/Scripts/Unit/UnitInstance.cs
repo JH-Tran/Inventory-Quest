@@ -204,7 +204,7 @@ public class UnitInstance : MonoBehaviour
     }
     public bool SpecialAttack(UnitInstance unitTakingDamage, ElementTypes moveElementType, int power)
     {
-        return unitTakingDamage.TakeSpecialDamage(unitData.displayName, moveElementType, specialAttack, level, power, CalculateDamageBurnReduction());
+        return unitTakingDamage.TakeSpecialDamage(moveElementType, specialAttack, level, power, CalculateDamageBurnReduction());
     }
     public bool TakePhysicalDamage(ElementTypes moveElementType, int attackerAttack, int attackerLevel, int movePower, float burnMultiplier)
     {
@@ -231,7 +231,7 @@ public class UnitInstance : MonoBehaviour
         else
             return false;
     }
-    public bool TakeSpecialDamage(string attackerName, ElementTypes moveElementType, int specialAttack, int attackerLevel, int movePower, float burnMultiplier)
+    public bool TakeSpecialDamage(ElementTypes moveElementType, int specialAttack, int attackerLevel, int movePower, float burnMultiplier)
     {
         float calculatedDamage = (((2 * attackerLevel / 5) + 2) * movePower * (specialAttack / spDefence) / 50 + 2) * 
             CalculateElementEffectiveMultiplier(moveElementType, unitData.type1) * 
@@ -258,6 +258,8 @@ public class UnitInstance : MonoBehaviour
         else
             return false;
     }
+
+    #region Calculations for RNG, Damage multiplier (Burn, Crit, super effective)
     private float CalculateDamageBurnReduction()
     {
         if(unitStatusEffect == StatusEffect.BURN)
@@ -308,5 +310,16 @@ public class UnitInstance : MonoBehaviour
         }
         //Debug.Log("RR: missed");
         return false;
+    }
+    #endregion
+
+    public bool IsUnitDropReward()
+    {
+        return RandomRoller(100,50);
+    }
+    public MovesData GetDropMoveData()
+    {
+        int randomNum = Random.Range(0, unitData.dropMoveList.Count + 1);
+        return unitData.dropMoveList[randomNum];
     }
 }
