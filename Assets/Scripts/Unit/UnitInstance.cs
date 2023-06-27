@@ -26,6 +26,8 @@ public class UnitInstance : MonoBehaviour
 
     public List<MovesData> moveList = new(4);
 
+    public List<InventoryItem> itemDropList;
+
     private float superEffectiveMultiplier = 1.5f;
     private float notSuperEffectiveMultiplier = 0.5f;
     private float normalEffectiveMultiplier = 1f;

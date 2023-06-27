@@ -15,8 +15,15 @@ public class EncounterSystem : MonoBehaviour
     public void OpenInventoryButton()
     {
         inventoryMenuGameObject.SetActive(true);
+        battleSystemGameObject.SetActive(false);
         adventureMenuGameObject.SetActive(false);
         inventoryButtonManager.OnButtonInventoryFromMainMenu();
+    }
+    public void OpenAdventureMenu()
+    {
+        inventoryMenuGameObject.SetActive(false);
+        battleSystemGameObject.SetActive(false);
+        adventureMenuGameObject.SetActive(true);
     }
     #endregion
 

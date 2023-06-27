@@ -28,6 +28,8 @@ public class BattleSystem : MonoBehaviour
 
     public BattleState state;
     public EncounterSystem encounterSystem;
+    //Variables for drop rate
+    public InventoryController inventoryController;
 
     internal void StartBattle(UnitData unitData)
     {
@@ -82,12 +84,10 @@ public class BattleSystem : MonoBehaviour
             }
         }
     }
-
     private void PlayerTurn()
     {
         StartCoroutine(PlayerTurnManager());
     }
-
     IEnumerator PlayerTurnManager()
     {
         if (playerUnit.GetUnitStatusEffect() != StatusEffect.NONE)
@@ -445,7 +445,6 @@ public class BattleSystem : MonoBehaviour
         }
     }
     #endregion
-
     IEnumerator UnitPhysicalAttack(UnitInstance unitAttacking, UnitInstance unitDefending, MovesData moveData)
     {
         dialogue.text = $"{unitAttacking.unitData.displayName} used {moveData.moveName}!";
@@ -558,9 +557,7 @@ public class BattleSystem : MonoBehaviour
     IEnumerator ReturnToMenu()
     {
         yield return new WaitForSeconds(2f);
-        if (state == BattleState.WON)
-            dialogue.text = "You won the battle!";
-        else if (state == BattleState.LOST)
+        if (state == BattleState.LOST)
             dialogue.text = "You were defeated!";
         else if (state == BattleState.ESCAPED)
             dialogue.text = "You did not receive any reward!";
@@ -568,12 +565,23 @@ public class BattleSystem : MonoBehaviour
         encounterSystem.gameObject.SetActive(true);
         gameObject.SetActive(false);
     }
+    IEnumerator EnemeyDrop()
+    {
+        yield return new WaitForSeconds(2f);
+        if (state == BattleState.WON)
+            dialogue.text = $"{enemyUnit.unitData.displayName} has drop some items!";
+        else
+            Debug.LogError("THIS STATE SHOULD BE ONLY WON. In enemey drop BattleSystem Script");
+        yield return new WaitForSeconds(2f);
+        OnButtonSetInventoryActive();
+        inventoryMenu.GetComponent<InventoryButtonManager>().OpenInventoryWithDrop();
+    }
     private void EndBattle()
     {
         if (state == BattleState.WON)
         {
             dialogue.text = $"You defeated {enemyUnit.unitData.displayName}!";
-            StartCoroutine(ReturnToMenu());
+            StartCoroutine(EnemeyDrop());
         }
         else if (state == BattleState.LOST)
         {

@@ -22,7 +22,7 @@ public class PlayerInformation : MonoBehaviour
     {
         if (!isMoveInitalised)
         {
-            inventoryController.InsertPlayerAwakeMoves(playerUnitInstance, moveGameObjectList);
+            inventoryController.InsertPlayerInitalMoves(playerUnitInstance, moveGameObjectList);
             isMoveInitalised = true;
         }
     }

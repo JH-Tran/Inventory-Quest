@@ -91,3 +91,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitData: {fileID: 0}
   currentUnitHealth: 0
+  unitStatusEffect: 0
+  turnDownCount: 0
+  poisonCount: 0
+  moveList: []
+  dropMoveList:
+  - {fileID: 11400000, guid: 66b55077018a19e4cbfe657f1e77bb52, type: 2}
+  itemDropList:
+  - itemData: {fileID: 11400000, guid: f46ec82824f22ef44a293bf57aa021ba, type: 2}

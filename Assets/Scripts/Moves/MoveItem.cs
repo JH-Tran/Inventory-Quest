@@ -6,8 +6,9 @@ using UnityEngine.UI;
 
 public class MoveItem : MonoBehaviour
 {
-    public MovesData moveData { get; set; }
+    public MovesData moveData;
     public InventoryItem inventoryItem;
+    private Sprite moveImage;
     
     public TMPro.TextMeshProUGUI moveText;
 

@@ -22,7 +22,7 @@ public class InventoryController : MonoBehaviour
     RectTransform rectTransform;
 
     [SerializeField] List<InventoryItemData> items;
-    [SerializeField] InventoryItemData genericMovePrefab;
+    [SerializeField] InventoryItemData genericMoveInventoryItemData;
 
     [SerializeField] GameObject movePrefab;
     [SerializeField] GameObject itemPrefab;
@@ -33,6 +33,11 @@ public class InventoryController : MonoBehaviour
     Vector2Int oldPosition;
     InventoryItem itemToHighlight;
 
+    #region test
+    //TESTING VARIABLES
+    public InventoryItemData testInventoryData;
+    public MovesData testMove;
+    #endregion
 
     private void Awake()
     {
@@ -44,16 +49,13 @@ public class InventoryController : MonoBehaviour
     {
         ItemIconDrag();
 
-        /* if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (selectedItem == null)
-            {
-                CreateRandomItem();
-            }
-        }*/
+            
+        }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            InsertRandomItem();
+            InsertRandomItemInDropGrid();
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -80,16 +82,40 @@ public class InventoryController : MonoBehaviour
 
         selectedItem.Rotate();
     }
-    private void InsertRandomItem()
+    public void InsertRandomItemInDropGrid()
     {
-        if (dropGridManager == null) { return; }
+        if (dropGridManager == null || selectedItem != null) { return; }
 
-        CreateRandomItem();
-        InventoryItem itemToInsert = selectedItem;
-        selectedItem = null;
+        InventoryItem itemToInsert = CreateRandomItem();
         if (!InsertItemToDropGrid(itemToInsert))
         {
             Destroy(itemToInsert.gameObject);
+        }
+    }
+    public void InsertItemInDropGrid(InventoryItemData item, MovesData moveData)
+    {
+        if (dropGridManager == null || selectedItem != null) { return; }
+        if (item == null && moveData == null) { Debug.LogError("Item and move data missing to insert item");  return; }
+
+        if (moveData == null)
+        {
+            Debug.Log("Insert Item");
+            InventoryItem itemToInsert = CreateSpecificItem(item);
+            if (!InsertItemToDropGrid(itemToInsert))
+            {
+                Debug.Log($"{itemToInsert.gameObject.name} was destoryed");
+                Destroy(itemToInsert.gameObject);
+            }
+        }
+        else
+        {
+            Debug.Log("Insert Move Item");
+            InventoryItem itemToInsert = CreateMoveItemGameObject(moveData);
+            if (!InsertItemToDropGrid(itemToInsert))
+            {
+                Debug.Log($"{itemToInsert.gameObject.name} was destoryed");
+                Destroy(itemToInsert.gameObject);
+            }
         }
     }
     private bool InsertItemToDropGrid(InventoryItem itemToInsert)
@@ -99,7 +125,7 @@ public class InventoryController : MonoBehaviour
         dropGridManager.PlaceItem(itemToInsert, posOnGrid.Value.x, posOnGrid.Value.y);
         return true;
     }
-    public void InsertPlayerAwakeMoves(UnitInstance playerUnitInstance, List<GameObject> moveGameObjectList)
+    public void InsertPlayerInitalMoves(UnitInstance playerUnitInstance, List<GameObject> moveGameObjectList)
     {
         for (int moveNum = 0; moveNum < moveGameObjectList.Count; moveNum++)
         {
@@ -108,8 +134,7 @@ public class InventoryController : MonoBehaviour
                 return;
             }
             //Create item gameobject and assign move information on the gameobject
-            InventoryItem moveItem = CreateMoveItemGameObject();
-            moveItem.GetComponent<MoveItem>().moveData = playerUnitInstance.moveList[moveNum];
+            InventoryItem moveItem = CreateMoveItemGameObject(playerUnitInstance.moveList[moveNum]);
             Vector2Int? posOnGrid = moveGameObjectList[moveNum].GetComponent<GridManager>().FindSpaceForObject(moveItem);
             if (posOnGrid == null) {
                 Debug.LogError($"Move cannot be place on {moveGameObjectList[moveNum].name} because it is null.");
@@ -145,26 +170,35 @@ public class InventoryController : MonoBehaviour
             inventoryHighlight.SetPosition(selectedItemGridManager, selectedItem, positionOnGrid.x, positionOnGrid.y);
         }
     }
-    private void CreateRandomItem()
+    private InventoryItem CreateRandomItem()
     {
+        //Create a phyical image for the inventory item that will be stored in the grid
         InventoryItem inventoryItem = Instantiate(itemPrefab).GetComponent<InventoryItem>();
-        selectedItem = inventoryItem;
         rectTransform = inventoryItem.GetComponent<RectTransform>();
         rectTransform.SetParent(canvasTransform);
 
         int selectedItemId = UnityEngine.Random.Range(0, items.Count);
         inventoryItem.Set(items[selectedItemId]);
+        return inventoryItem;
     }
-    private InventoryItem CreateMoveItemGameObject()
+    private InventoryItem CreateSpecificItem(InventoryItemData inventoryItemData)
+    {
+        InventoryItem inventoryItem = Instantiate(itemPrefab).GetComponent<InventoryItem>();
+        rectTransform = inventoryItem.GetComponent<RectTransform>();
+        rectTransform.SetParent(canvasTransform);
+        inventoryItem.Set(inventoryItemData);
+        return inventoryItem;
+    }
+    private InventoryItem CreateMoveItemGameObject(MovesData moveItemData)
     {
         InventoryItem inventoryItem = Instantiate(movePrefab).GetComponent<InventoryItem>();
         rectTransform = inventoryItem.GetComponent<RectTransform>();
         rectTransform.SetParent(canvasTransform);
         MoveItem moveItem = inventoryItem.gameObject.AddComponent<MoveItem>();
         moveItem.inventoryItem = inventoryItem;
+        inventoryItem.GetComponent<MoveItem>().moveData = moveItemData;
 
-        inventoryItem.Set(genericMovePrefab);
-
+        inventoryItem.Set(genericMoveInventoryItemData);
         return inventoryItem;
     }
     private void LeftMouseButtonPress()

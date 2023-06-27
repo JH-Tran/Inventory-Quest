@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Unit Data")]
@@ -24,6 +25,8 @@ public class UnitData : ScriptableObject
     //Status effects
     public bool isConfused;
     public bool isBound;
+    //Moves
+    public List<MovesData> dropMoveList = new(4);
 }
 
 //Status effect that can only be one at a time
