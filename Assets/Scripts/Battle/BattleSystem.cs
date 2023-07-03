@@ -582,13 +582,14 @@ public class BattleSystem : MonoBehaviour
             Debug.LogError("THIS STATE SHOULD BE ONLY WON. In enemey drop BattleSystem Script");
         yield return new WaitForSeconds(2f);
         OnButtonSetInventoryActive();
-        inventoryMenu.GetComponent<InventoryButtonManager>().OpenInventoryWithDropGrid();
+        inventoryMenu.GetComponent<InventoryButtonManager>().OpenInventoryAfterBattle();
         inventoryController.InsertRandomItemInDropGrid();
         if (enemyUnit.IsUnitDropReward())
         {
             Debug.Log("GAIN BONUS DROP REWARD");
             inventoryController.InsertItemInDropGrid(null,enemyUnit.GetRandomMove());
         }
+        gameObject.SetActive(false);
     }
     private void EndBattle()
     {
