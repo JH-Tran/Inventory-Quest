@@ -41,7 +41,7 @@ public class BattleSystem : MonoBehaviour
     IEnumerator SetUpBattle()
     {
         enemyUnit.SetUnitHealth();
-        enemyUnit.CleanseUnitStatusEffect();
+        enemyUnit.RemoveUnitStatusEffect();
         dialogue.text = $"A wild {enemyUnit.unitData.displayName} approaches...";
 
         playerHUD.SetHUD(playerUnit);

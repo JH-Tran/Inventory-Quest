@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public class PlayerInformation : MonoBehaviour
@@ -14,10 +13,6 @@ public class PlayerInformation : MonoBehaviour
     public GameObject weaponGrid;
     private bool isMoveInitalised = false;
 
-    public void UpdatePlayerStatus()
-    {
-        headGrid.GetComponentInChildren<InventoryItemData>();
-    }
     public void InitiatePlayerMoves()
     {
         if (!isMoveInitalised)
@@ -41,5 +36,75 @@ public class PlayerInformation : MonoBehaviour
                 playerUnitInstance.moveList[i] = null;
             }
         }
+    }
+    public void SetPlayerGearStatus()
+    {
+        ResetPlayerStat();
+        if (headGrid.GetComponentInChildren<InventoryItem>() != null)
+        {
+            InventoryItem headGear = headGrid.GetComponentInChildren<InventoryItem>();
+            for (int i = 0; i < headGear.gearStatList.Count;i++)
+            {
+                UpdatePlayerStat(headGear.gearStatList[i].Stat, headGear.gearStatList[i].StatValue);
+            }
+        }
+        if (chestGrid.GetComponentInChildren<InventoryItem>() != null)
+        {
+            InventoryItem chestGear = chestGrid.GetComponentInChildren<InventoryItem>();
+            for (int i = 0; i < chestGear.gearStatList.Count; i++)
+            {
+                UpdatePlayerStat(chestGear.gearStatList[i].Stat, chestGear.gearStatList[i].StatValue);
+            }
+        }
+        if (legGrid.GetComponentInChildren<InventoryItem>() != null)
+        {
+            InventoryItem legGear = legGrid.GetComponentInChildren<InventoryItem>();
+            for (int i = 0; i < legGear.gearStatList.Count; i++)
+            {
+                UpdatePlayerStat(legGear.gearStatList[i].Stat, legGear.gearStatList[i].StatValue);
+            }
+        }
+        if (weaponGrid.GetComponentInChildren<InventoryItem>() != null)
+        {
+            InventoryItem weaponGear = weaponGrid.GetComponentInChildren<InventoryItem>();
+            for (int i = 0; i < weaponGear.gearStatList.Count; i++)
+            {
+                UpdatePlayerStat(weaponGear.gearStatList[i].Stat, weaponGear.gearStatList[i].StatValue);
+            }
+        }
+        Debug.Log($"HP: {playerUnitInstance.maxHp + playerUnitInstance.playerMaxHp}, ATTACK: {playerUnitInstance.attack + playerUnitInstance.playerAttack}, SpATTACK: {playerUnitInstance.playerSpecialAttack + playerUnitInstance.specialAttack}, Defence: {playerUnitInstance.playerDefence + playerUnitInstance.defence}, SpDefence: {playerUnitInstance.playerSpecialDefence + playerUnitInstance.specialDefence}, Speed: {playerUnitInstance.playerSpeed + playerUnitInstance.unitData.speed}");
+    }
+    private void UpdatePlayerStat(UnitStats stat, int value)
+    {
+        switch (stat) 
+        {
+            case UnitStats.ATTACK:
+                playerUnitInstance.playerAttack += value;
+                break;
+            case UnitStats.SPECIALATTACK:
+                playerUnitInstance.playerSpecialAttack += value;
+                break;
+            case UnitStats.DEFENCE:
+                playerUnitInstance.playerDefence += value;
+                break;
+            case UnitStats.SPECIALDEFENCE:
+                playerUnitInstance.playerSpecialDefence += value;
+                break;
+            case UnitStats.HEALTH:
+                playerUnitInstance.playerMaxHp += value;
+                break;
+            case UnitStats.SPEED:
+                playerUnitInstance.playerSpeed += value;
+                break;
+        }
+    }
+    private void ResetPlayerStat()
+    {
+        playerUnitInstance.playerAttack = 0;
+        playerUnitInstance.playerSpecialAttack = 0;
+        playerUnitInstance.playerDefence = 0;
+        playerUnitInstance.playerSpecialDefence = 0;
+        playerUnitInstance.playerMaxHp = 0;
+        playerUnitInstance.playerSpeed = 0;
     }
 }

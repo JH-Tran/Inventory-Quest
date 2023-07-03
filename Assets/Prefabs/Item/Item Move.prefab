@@ -228,3 +228,4 @@ MonoBehaviour:
   onGridPositionX: 0
   onGridPositionY: 0
   isRotated: 0
+  GearStatList: []

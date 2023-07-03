@@ -95,7 +95,7 @@ public class GridManager : MonoBehaviour
         {
             return false;
         }
-        if (inventoryItem.data.itemClass != gridClassification && gridClassification != ItemClassification.anyItem)
+        if (inventoryItem.data.itemClass != gridClassification && gridClassification != ItemClassification.Any)
         {
             return false;
         }

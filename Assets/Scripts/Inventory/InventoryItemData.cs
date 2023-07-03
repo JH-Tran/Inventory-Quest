@@ -17,13 +17,13 @@ public class InventoryItemData : ScriptableObject
 
 public enum ItemClassification
 {
-    consumableItem,
-    headItem,
-    chestItem,
-    legItem,
-    weaponItem,
-    anyItem,
-    moveItem
+    Consumable,
+    Head,
+    Chest,
+    Leg,
+    Weapon,
+    Any,
+    Move
 };
 public enum WeaponClassification
 {

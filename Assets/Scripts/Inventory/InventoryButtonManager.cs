@@ -8,7 +8,7 @@ public class InventoryButtonManager : MonoBehaviour
     public GameObject mainMenu;
     public GameObject inventoryMenu;
     //Gameobject that changes based on whether player is in battle
-    public GameObject dropGridGroup;
+    public GameObject adventureGridButton;
     public GameObject battleBackButton;
     public GameObject mainMenuButton;
     //
@@ -24,7 +24,7 @@ public class InventoryButtonManager : MonoBehaviour
     }
     public void OpenInventoryWithDropGrid()
     {
-        dropGridGroup.SetActive(true);
+        adventureGridButton.SetActive(true);
         battleBackButton.SetActive(false);
         mainMenuButton.SetActive(false);
         DefaultInventoryLayout();
@@ -49,7 +49,6 @@ public class InventoryButtonManager : MonoBehaviour
                 GameObject.Destroy(item.gameObject);
             }
         }
-        ReturnToMainMenu();
     }
     public void OnButtonOpenGear()
     {
@@ -64,7 +63,7 @@ public class InventoryButtonManager : MonoBehaviour
     public void OnButtonInventoryFromMainMenu()
     {
         battleBackButton.SetActive(false);
-        dropGridGroup.SetActive(false);
+        adventureGridButton.SetActive(false);
         mainMenuButton.SetActive(true);
         DefaultInventoryLayout();
     }
@@ -72,7 +71,7 @@ public class InventoryButtonManager : MonoBehaviour
     {
         battleBackButton.SetActive(true);
         mainMenuButton.SetActive(false);
-        dropGridGroup.SetActive(false);
+        adventureGridButton.SetActive(false);
         DefaultInventoryLayout();
     }
 }

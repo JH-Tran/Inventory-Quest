@@ -14,8 +14,11 @@ public class InventoryController : MonoBehaviour
             inventoryHighlight.SetParent(value);
         } 
     }
-
-    public GridManager dropGridManager;
+    //Constant variables
+    [SerializeField] GridManager dropGridManager;
+    [SerializeField] InventoryStatUserInterface inventoryStatUI;
+    [SerializeField] PlayerInformation playerInformation;
+    private GearData gearData = new();
 
     InventoryItem selectedItem;
     InventoryItem overlapItem;
@@ -35,8 +38,8 @@ public class InventoryController : MonoBehaviour
 
     #region test
     //TESTING VARIABLES
-    public InventoryItemData testInventoryData;
-    public MovesData testMove;
+/*    public InventoryItemData testInventoryData;
+    public MovesData testMove;*/
     #endregion
 
     private void Awake()
@@ -57,7 +60,6 @@ public class InventoryController : MonoBehaviour
         {
             InsertRandomItemInDropGrid();
         }
-
         if (Input.GetKeyDown(KeyCode.R))
         {
             RotateItem();
@@ -179,6 +181,10 @@ public class InventoryController : MonoBehaviour
 
         int selectedItemId = UnityEngine.Random.Range(0, items.Count);
         inventoryItem.Set(items[selectedItemId]);
+        if (inventoryItem.data.itemClass == ItemClassification.Head || inventoryItem.data.itemClass == ItemClassification.Chest || inventoryItem.data.itemClass == ItemClassification.Leg)
+        {
+            AddGearStat(inventoryItem);
+        }
         return inventoryItem;
     }
     private InventoryItem CreateSpecificItem(InventoryItemData inventoryItemData)
@@ -232,6 +238,9 @@ public class InventoryController : MonoBehaviour
         if (complete)
         {
             selectedItem = null;
+            playerInformation.SetPlayerGearStatus();
+            inventoryStatUI.UpdatePlayerStatUserInterface();
+            inventoryStatUI.SetItemAboutUserInterface(false);
             if (overlapItem != null)
             {
                 selectedItem = overlapItem;
@@ -247,6 +256,8 @@ public class InventoryController : MonoBehaviour
         if (selectedItem != null)
         {
             rectTransform = selectedItem.GetComponent<RectTransform>();
+            inventoryStatUI.UpdateItemAboutUserInterface(selectedItem);
+            inventoryStatUI.SetItemAboutUserInterface(true);
         }
     }
     private void ItemIconDrag()
@@ -255,5 +266,27 @@ public class InventoryController : MonoBehaviour
         {
             rectTransform.position = Input.mousePosition;
         }
+    }
+    private void AddGearStat(InventoryItem inventoryItem)
+    {
+        if (inventoryItem.data.itemClass == ItemClassification.Head)
+        {
+            GearStats gs = new(gearData.GetHeadMainStat(), gearData.GetRandomPositiveStatNum());
+            inventoryItem.gearStatList.Add(gs);
+        }
+        else if (inventoryItem.data.itemClass == ItemClassification.Chest)
+        {
+            GearStats gs = new(gearData.GetChestMainStat(), gearData.GetRandomPositiveStatNum());
+            inventoryItem.gearStatList.Add(gs);
+        }
+        else if (inventoryItem.data.itemClass == ItemClassification.Leg)
+        {
+            GearStats gs = new(gearData.GetLegMainStat(), gearData.GetRandomPositiveStatNum());
+            inventoryItem.gearStatList.Add(gs);
+        }
+        GearStats gs1 = new(gearData.GetRandomStat(), gearData.GetRandomPositiveStatNum());
+        inventoryItem.gearStatList.Add(gs1);
+        GearStats gs2 = new(gearData.GetRandomStat(), gearData.GetRandomPositiveStatNum());
+        inventoryItem.gearStatList.Add(gs2);
     }
 }
