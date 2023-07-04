@@ -28,3 +28,4 @@ MonoBehaviour:
   type2: 0
   isConfused: 0
   isBound: 0
+  dropMoveList: []

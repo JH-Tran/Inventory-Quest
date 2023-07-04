@@ -429,7 +429,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -86.0651, y: -86.52133}
+  m_AnchoredPosition: {x: -86.0651, y: -99.183205}
   m_SizeDelta: {x: 133.1126, y: 16.53}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &40844799
@@ -650,6 +650,8 @@ MonoBehaviour:
   adventureMenuGameObject: {fileID: 52760315}
   unitList:
   - {fileID: 11400000, guid: 596b59db8fbc3e443983ffa4ee6592ce, type: 2}
+  - {fileID: 11400000, guid: b31bd6cc35a89c64390b98361b6fc8cf, type: 2}
+  - {fileID: 11400000, guid: f0fa12f0c28aa354bad11eb9b5f1379e, type: 2}
 --- !u!1 &59859683
 GameObject:
   m_ObjectHideFlags: 0
@@ -748,19 +750,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 931928869}
         m_TargetAssemblyTypeName: InventoryStatUserInterface, Assembly-CSharp
-        m_MethodName: UpdatePlayerStatUserInterface
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 931928869}
-        m_TargetAssemblyTypeName: InventoryStatUserInterface, Assembly-CSharp
-        m_MethodName: SetItemAboutUserInterface
+        m_MethodName: SetAboutItemUserInterface
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2230,9 +2220,9 @@ MonoBehaviour:
   playerInformation: {fileID: 519420035}
   items:
   - {fileID: 11400000, guid: 6d05f8b71ddadc04d86a73182a98abda, type: 2}
-  - {fileID: 11400000, guid: f46ec82824f22ef44a293bf57aa021ba, type: 2}
   - {fileID: 11400000, guid: a691f38c305bcd8418fd9b1aa885ba5f, type: 2}
   - {fileID: 11400000, guid: c866372eda104d2488adb97e9370c61e, type: 2}
+  - {fileID: 11400000, guid: f46ec82824f22ef44a293bf57aa021ba, type: 2}
   genericMoveInventoryItemData: {fileID: 11400000, guid: bc5daafbff169154c85f53296309b31f, type: 2}
   movePrefab: {fileID: 6875622647858292645, guid: 0e21c01cb8a2986408c2d75146f9b6d7, type: 3}
   itemPrefab: {fileID: 6875622647858292645, guid: 76950a0fd0273e2458c88011223d7c44, type: 3}
@@ -3668,6 +3658,7 @@ MonoBehaviour:
   gearInventory: {fileID: 1082067528}
   movesInventory: {fileID: 191563358}
   dropGridGameObject: {fileID: 1085996142}
+  inventoryStatUserInterface: {fileID: 931928869}
 --- !u!114 &931928869
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4279,7 +4270,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1020064879
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6304,8 +6295,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -85.824, y: -66.715324}
-  m_SizeDelta: {x: 144.25, y: 23.0804}
+  m_AnchoredPosition: {x: -85.824, y: -76.29}
+  m_SizeDelta: {x: 144.25, y: 42.23}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1371384613
 MonoBehaviour:
@@ -6327,7 +6318,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Item
+  m_text: Itemdsadasdsadsdsdadas
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7e6bc8e88f41eb44e83f4784b18f001d, type: 2}
   m_sharedMaterial: {fileID: -5172241853357700678, guid: 7e6bc8e88f41eb44e83f4784b18f001d, type: 2}
@@ -6354,8 +6345,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 15
+  m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -7028,6 +7019,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1790365649}
+        m_TargetAssemblyTypeName: BattleHUD, Assembly-CSharp
+        m_MethodName: SetHP
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 913297587}
+          m_ObjectArgumentAssemblyTypeName: UnitInstance, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -9248,7 +9251,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -86.0651, y: -151.36691}
+  m_AnchoredPosition: {x: -86.0651, y: -164.02878}
   m_SizeDelta: {x: 133.1126, y: 107.923}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1873834678
@@ -9299,8 +9302,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 12
-  m_fontSizeBase: 12
+  m_fontSize: 10
+  m_fontSizeBase: 10
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -9335,7 +9338,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -0.00002293124, w: 0}
+  m_margin: {x: 0, y: 0, z: -0.00002293124, w: 8.846043}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

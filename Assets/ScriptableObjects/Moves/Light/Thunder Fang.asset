@@ -15,7 +15,7 @@ MonoBehaviour:
   moveName: Thunder Fang
   description: 
   moveType: 1
-  power: 65
+  power: 75
   accuracy: 95
   elementalType: 5
   statusEffect: 0

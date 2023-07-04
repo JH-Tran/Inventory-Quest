@@ -240,7 +240,7 @@ public class InventoryController : MonoBehaviour
             selectedItem = null;
             playerInformation.SetPlayerGearStatus();
             inventoryStatUI.UpdatePlayerStatUserInterface();
-            inventoryStatUI.SetItemAboutUserInterface(false);
+            inventoryStatUI.SetAboutItemUserInterface(false);
             if (overlapItem != null)
             {
                 selectedItem = overlapItem;
@@ -257,7 +257,7 @@ public class InventoryController : MonoBehaviour
         {
             rectTransform = selectedItem.GetComponent<RectTransform>();
             inventoryStatUI.UpdateItemAboutUserInterface(selectedItem);
-            inventoryStatUI.SetItemAboutUserInterface(true);
+            inventoryStatUI.SetAboutItemUserInterface(true);
         }
     }
     private void ItemIconDrag()

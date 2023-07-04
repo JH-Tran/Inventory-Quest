@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Sheer Cold
   m_EditorClassIdentifier: 
   moveName: Sheer Cold
-  description: 
+  description: The target is attacked with a blast of absolute cold. The target cannot
+    move if it hits.
   moveType: 5
   power: 0
   accuracy: 0

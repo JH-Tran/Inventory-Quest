@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5becddc874472a49a6a0e4948bf095f, type: 3}
-  m_Name: Will O Wisp
+  m_Name: Water Fang
   m_EditorClassIdentifier: 
-  moveName: Will-O-Wisp
+  moveName: Water Fang
   description: 
-  moveType: 5
-  power: 40
-  accuracy: 100
-  elementalType: 2
-  statusEffect: 3
-  statusAccuracy: 95
+  moveType: 1
+  power: 65
+  accuracy: 90
+  elementalType: 3
+  statusEffect: 0
+  statusAccuracy: 0
   unitStats: 0

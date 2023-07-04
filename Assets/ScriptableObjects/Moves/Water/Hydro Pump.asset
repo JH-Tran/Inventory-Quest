@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5becddc874472a49a6a0e4948bf095f, type: 3}
-  m_Name: Will O Wisp
+  m_Name: Hydro Pump
   m_EditorClassIdentifier: 
-  moveName: Will-O-Wisp
-  description: 
-  moveType: 5
-  power: 40
-  accuracy: 100
-  elementalType: 2
-  statusEffect: 3
-  statusAccuracy: 95
+  moveName: Hydro Pump
+  description: "The target is blasted by a huge volume of water launched under great
+    pressure.\r"
+  moveType: 2
+  power: 120
+  accuracy: 80
+  elementalType: 3
+  statusEffect: 0
+  statusAccuracy: 0
   unitStats: 0

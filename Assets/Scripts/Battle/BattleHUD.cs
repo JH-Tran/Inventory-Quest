@@ -17,13 +17,12 @@ public class BattleHUD : MonoBehaviour
         nameText.text = unit.unitData.displayName;
         levelText.text = $"Lv.{unit.Level}";
         UpdateStatusEffect(unit);
+        SetHP(unit);
         unitImage.sprite = unit.unitData.unitSprite;
-        hpSlider.maxValue = unit.maxHp;
-        hpSlider.value = unit.currentUnitHealth;
-        healthText.text = $"{unit.currentUnitHealth}/{unit.maxHp}hp";
     }
     public void SetHP(UnitInstance unit)
     {
+        hpSlider.maxValue = unit.maxHp;
         hpSlider.value = unit.currentUnitHealth;
         healthText.text = $"{unit.currentUnitHealth}/{unit.maxHp}hp";
     }

@@ -29,6 +29,6 @@ MonoBehaviour:
   isConfused: 0
   isBound: 0
   dropMoveList:
-  - {fileID: 11400000, guid: 577aed6e845370a4ab577e45c21b8b7c, type: 2}
+  - {fileID: 11400000, guid: cc24a6da6e443694cb23376356f6e90b, type: 2}
   - {fileID: 11400000, guid: aa1f04fb4af212c438fa4a13168568f7, type: 2}
   - {fileID: 11400000, guid: 6c199e3c674c8b8488e47ea29f780bb7, type: 2}

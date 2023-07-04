@@ -6,7 +6,7 @@ public class UnitInstance : MonoBehaviour
     public UnitData unitData;
 
     [SerializeField]
-    public int currentUnitHealth;
+    public int currentUnitHealth = 1;
     private int level = 1;
     public int Level => level;
 
@@ -40,24 +40,27 @@ public class UnitInstance : MonoBehaviour
     private bool isDefenderTakeCriticalHit;
     public int attack
     {
-        get { return Mathf.FloorToInt((unitData.attack * level) / 100f) + 5; }
+        get { return (Mathf.FloorToInt((unitData.attack * level) / 100f) + 5) + _playerAttack; }
     }
     public int defence
     {
-        get { return Mathf.FloorToInt((unitData.defence * level) / 100f) + 5; }
+        get { return (Mathf.FloorToInt((unitData.defence * level) / 100f) + 5) + _playerDefence; }
     }
     public int specialAttack
     {
-        get { return Mathf.FloorToInt((unitData.specialAttack * level) / 100f) + 5; }
-    }
+        get { return (Mathf.FloorToInt((unitData.specialAttack * level) / 100f) + 5) + _playerSpecialAttack
+                
+                ; }
+    } 
     public int specialDefence
     {
-        get { return Mathf.FloorToInt((unitData.specialDefence * level) / 100f) + 5; }
+        get { return (Mathf.FloorToInt((unitData.specialDefence * level) / 100f) + 5) + playerSpecialDefence; }
     }
     public int maxHp
     {
-        get { return Mathf.FloorToInt((unitData.maxHealthPoint * level) / 100f) + 5; }
+        get { return (Mathf.FloorToInt((unitData.maxHealthPoint * level) / 100f) + 5) + _playerMaxHp; }
     }
+
     private int _playerAttack = 0;
     private int _playerDefence = 0;
     private int _playerSpecialAttack = 0;
@@ -71,7 +74,7 @@ public class UnitInstance : MonoBehaviour
     public int playerMaxHp { get => _playerMaxHp; set { _playerMaxHp = value; } }
     public int playerSpeed { get => _playerSpeed; set { _playerSpeed = value; } }
 
-    public void Awake()
+    public void Start()
     {
         if (unitData != null)
         {
@@ -84,6 +87,10 @@ public class UnitInstance : MonoBehaviour
         level = unitData.startingLevel;
         currentUnitHealth = maxHp;
     }
+    public void SetUnitHealthToMaxHealth()
+    {
+        currentUnitHealth = maxHp;
+    }
     public bool IsUnitCriticalAttack()
     {
         return isDefenderTakeCriticalHit;
@@ -91,7 +98,7 @@ public class UnitInstance : MonoBehaviour
     public void HealUnit(int heal)
     {
         currentUnitHealth += heal;
-        if (currentUnitHealth > maxHp)
+        if (currentUnitHealth > maxHp + playerMaxHp)
         {
             currentUnitHealth = maxHp;
         }
@@ -214,17 +221,17 @@ public class UnitInstance : MonoBehaviour
     }
     public bool PhysicalAttack(UnitInstance unitTakingDamage, ElementTypes moveElementType, int power)
     {
-        return unitTakingDamage.TakePhysicalDamage(moveElementType, (attack+playerAttack), level, power, CalculateDamageBurnReduction());
+        return unitTakingDamage.TakePhysicalDamage(moveElementType, attack, level, power, CalculateDamageBurnReduction());
     }
     public bool SpecialAttack(UnitInstance unitTakingDamage, ElementTypes moveElementType, int power)
     {
-        return unitTakingDamage.TakeSpecialDamage(moveElementType, (specialAttack+specialAttack), level, power, CalculateDamageBurnReduction());
+        return unitTakingDamage.TakeSpecialDamage(moveElementType, specialAttack, level, power, CalculateDamageBurnReduction());
     }
     public bool TakePhysicalDamage(ElementTypes moveElementType, int attackerAttack, int attackerLevel, int movePower, float burnMultiplier)
     {
         float type1Reaction = CalculateElementEffectiveMultiplier(moveElementType, unitData.type1);
         moveEffectivenessType1 = SetTypeEffectiveness(type1Reaction);
-        float calculatedDamage = (((2 * attackerLevel / 5) + 2) * movePower * (attackerAttack / (defence+playerDefence)) / 50 + 2) * type1Reaction * CalculateCriticalMultiplier() * burnMultiplier;
+        float calculatedDamage = (((2 * attackerLevel / 5) + 2) * movePower * (attackerAttack / defence) / 50 + 2) * type1Reaction * CalculateCriticalMultiplier() * burnMultiplier;
         if (unitData.type2 != ElementTypes.NONE)
         {
             float type2Reaction = CalculateElementEffectiveMultiplier(moveElementType, unitData.type2);
@@ -255,7 +262,7 @@ public class UnitInstance : MonoBehaviour
     public bool TakeSpecialDamage(ElementTypes moveElementType, int specialAttack, int attackerLevel, int movePower, float burnMultiplier)
     {
         float type1Reaction = CalculateElementEffectiveMultiplier(moveElementType, unitData.type1);
-        float calculatedDamage = (((2 * attackerLevel / 5) + 2) * movePower * (specialAttack / (specialDefence+playerSpecialDefence)) / 50 + 2) * type1Reaction * CalculateCriticalMultiplier() * burnMultiplier;
+        float calculatedDamage = (((2 * attackerLevel / 5) + 2) * movePower * (specialAttack / specialDefence) / 50 + 2) * type1Reaction * CalculateCriticalMultiplier() * burnMultiplier;
         if (unitData.type2 != ElementTypes.NONE)
         {
             float type2Reaction = CalculateElementEffectiveMultiplier(moveElementType, unitData.type2);

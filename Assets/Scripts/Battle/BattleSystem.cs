@@ -31,7 +31,7 @@ public class BattleSystem : MonoBehaviour
     //Variables for drop rate
     public InventoryController inventoryController;
 
-    internal void StartBattle(UnitData unitData)
+    public void StartBattle(UnitData unitData)
     {
         state = BattleState.START;
         enemyUnit.unitData = unitData;
@@ -43,7 +43,7 @@ public class BattleSystem : MonoBehaviour
         enemyUnit.SetUnitHealth();
         enemyUnit.RemoveUnitStatusEffect();
         dialogue.text = $"A wild {enemyUnit.unitData.displayName} approaches...";
-
+        Debug.Log($"Player health {playerUnit.currentUnitHealth}");
         playerHUD.SetHUD(playerUnit);
         enemyHUD.SetHUD(enemyUnit);
 

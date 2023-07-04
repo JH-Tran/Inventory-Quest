@@ -13,6 +13,11 @@ public class PlayerInformation : MonoBehaviour
     public GameObject weaponGrid;
     private bool isMoveInitalised = false;
 
+    public void Start()
+    {
+        playerUnitInstance.SetUnitHealth();
+    }
+
     public void InitiatePlayerMoves()
     {
         if (!isMoveInitalised)
@@ -72,7 +77,12 @@ public class PlayerInformation : MonoBehaviour
                 UpdatePlayerStat(weaponGear.gearStatList[i].Stat, weaponGear.gearStatList[i].StatValue);
             }
         }
-        Debug.Log($"HP: {playerUnitInstance.maxHp + playerUnitInstance.playerMaxHp}, ATTACK: {playerUnitInstance.attack + playerUnitInstance.playerAttack}, SpATTACK: {playerUnitInstance.playerSpecialAttack + playerUnitInstance.specialAttack}, Defence: {playerUnitInstance.playerDefence + playerUnitInstance.defence}, SpDefence: {playerUnitInstance.playerSpecialDefence + playerUnitInstance.specialDefence}, Speed: {playerUnitInstance.playerSpeed + playerUnitInstance.unitData.speed}");
+        if (playerUnitInstance.currentUnitHealth > playerUnitInstance.maxHp)
+        {
+            playerUnitInstance.SetUnitHealthToMaxHealth();
+        }
+        Debug.Log($"PLAYER CURRENT HEALTH: {playerUnitInstance.currentUnitHealth}");
+        Debug.Log($"HP: {playerUnitInstance.maxHp}, ATTACK: {playerUnitInstance.attack}, SpATTACK: {playerUnitInstance.playerSpecialAttack}, Defence: {playerUnitInstance.playerDefence}, SpDefence: {playerUnitInstance.playerSpecialDefence}, Speed: {playerUnitInstance.playerSpeed + playerUnitInstance.unitData.speed}");
     }
     private void UpdatePlayerStat(UnitStats stat, int value)
     {

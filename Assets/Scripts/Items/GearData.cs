@@ -9,7 +9,7 @@ public class GearData : MonoBehaviour
     private List<UnitStats> legGearMainStatList = new() { UnitStats.SPEED };
     private List<UnitStats> allGearStatList = new() { UnitStats.HEALTH, UnitStats.DEFENCE, UnitStats.SPECIALDEFENCE, UnitStats.SPEED, UnitStats.ATTACK, UnitStats.SPECIALATTACK, UnitStats.SPEED };
 
-    private int maxPositiveStatRoll = 51;
+    private int maxPositiveStatRoll = 11;
     private int maxNegativeStatRoll = 11;
 
     public UnitStats GetHeadMainStat()

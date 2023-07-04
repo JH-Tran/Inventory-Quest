@@ -17,6 +17,8 @@ public class InventoryButtonManager : MonoBehaviour
 
     public GameObject dropGridGameObject;
 
+    [SerializeField] InventoryStatUserInterface inventoryStatUserInterface;
+
     private void DefaultInventoryLayout()
     {
         gearInventory.SetActive(true);
@@ -27,6 +29,7 @@ public class InventoryButtonManager : MonoBehaviour
         adventureAfterBattleButton.SetActive(true);
         battleBackButton.SetActive(false);
         mainMenuButton.SetActive(false);
+        inventoryStatUserInterface.UpdatePlayerStatUserInterface();
         DefaultInventoryLayout();
     }
     private void ReturnToMainMenu()
@@ -65,6 +68,7 @@ public class InventoryButtonManager : MonoBehaviour
         battleBackButton.SetActive(false);
         adventureAfterBattleButton.SetActive(false);
         mainMenuButton.SetActive(true);
+        inventoryStatUserInterface.UpdatePlayerStatUserInterface();
         DefaultInventoryLayout();
     }
     public void OnButtonInventoryFromBattle()
@@ -72,6 +76,7 @@ public class InventoryButtonManager : MonoBehaviour
         battleBackButton.SetActive(true);
         mainMenuButton.SetActive(false);
         adventureAfterBattleButton.SetActive(false);
+        inventoryStatUserInterface.UpdatePlayerStatUserInterface();
         DefaultInventoryLayout();
     }
 }

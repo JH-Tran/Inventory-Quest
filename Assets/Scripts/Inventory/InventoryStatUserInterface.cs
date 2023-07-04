@@ -20,11 +20,11 @@ public class InventoryStatUserInterface : MonoBehaviour
     [SerializeField] TMP_Text itemAbout;
     public void UpdatePlayerStatUserInterface()
     {
-        playerHealthTextMesh.text = $"Health: {playerUnitInstance.maxHp + playerUnitInstance.playerMaxHp}";
-        playerAttackTextMesh.text = $"Attack: {playerUnitInstance.attack + playerUnitInstance.playerAttack}";
-        playerSpecialAttackTextMesh.text = $"Special Attack: {playerUnitInstance.specialAttack + playerUnitInstance.playerSpecialAttack}";
-        playerDefenceTextMesh.text = $"Defence: {playerUnitInstance.defence + playerUnitInstance.playerDefence}";
-        playerSpecialDefenceTextMesh.text = $"Special Defence: {playerUnitInstance.specialDefence + playerUnitInstance.playerSpecialDefence}";
+        playerHealthTextMesh.text = $"Health: {playerUnitInstance.maxHp}";
+        playerAttackTextMesh.text = $"Attack: {playerUnitInstance.attack}";
+        playerSpecialAttackTextMesh.text = $"Special Attack: {playerUnitInstance.specialAttack}";
+        playerDefenceTextMesh.text = $"Defence: {playerUnitInstance.defence}";
+        playerSpecialDefenceTextMesh.text = $"Special Defence: {playerUnitInstance.specialDefence}";
         playerSpeedTextMesh.text = $"Speed: {playerUnitInstance.unitData.speed + playerUnitInstance.playerSpeed}";
     }
 
@@ -60,7 +60,7 @@ public class InventoryStatUserInterface : MonoBehaviour
         }
     }
 
-    public void SetItemAboutUserInterface(bool isActive)
+    public void SetAboutItemUserInterface(bool isActive)
     {
         itemGameObject.SetActive(isActive);
     }
