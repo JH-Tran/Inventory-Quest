@@ -2129,7 +2129,6 @@ GameObject:
   - component: {fileID: 519420033}
   - component: {fileID: 519420034}
   - component: {fileID: 519420035}
-  - component: {fileID: 519420036}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2155,7 +2154,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 1, b: 0.036849022, a: 0}
+  m_BackGroundColor: {r: 0, g: 0.39215687, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -2263,18 +2262,6 @@ MonoBehaviour:
   chestGrid: {fileID: 1391941944}
   legGrid: {fileID: 205366007}
   weaponGrid: {fileID: 349749296}
---- !u!114 &519420036
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efb18afbcf8ae8644ad8caa63b8c3eae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &567297268
 GameObject:
   m_ObjectHideFlags: 0

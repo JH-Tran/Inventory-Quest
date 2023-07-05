@@ -42,23 +42,23 @@ public class BattleSystem : MonoBehaviour
     {
         enemyUnit.SetUnitHealth();
         enemyUnit.RemoveUnitStatusEffect();
-        dialogue.text = $"A wild {enemyUnit.unitData.displayName} approaches...";
+        dialogue.text = $"A wild {enemyUnit.unitData.DisplayName} approaches...";
         Debug.Log($"Player health {playerUnit.currentUnitHealth}");
         playerHUD.SetHUD(playerUnit);
         enemyHUD.SetHUD(enemyUnit);
 
         yield return new WaitForSeconds(2f);
         // **Implement calculation for reuduction in speed when unit is paralysis
-        if (playerUnit.unitData.speed > enemyUnit.unitData.speed)
+        if (playerUnit.unitData.Speed > enemyUnit.unitData.Speed)
         {
             dialogue.text = $"You take initiative!";
             yield return new WaitForSeconds(2f);
             state = BattleState.PLAYERTURN;
             PlayerTurn();
         }
-        else if (playerUnit.unitData.speed < enemyUnit.unitData.speed)
+        else if (playerUnit.unitData.Speed < enemyUnit.unitData.Speed)
         {
-            dialogue.text = $"{enemyUnit.unitData.displayName} will take initiative!";
+            dialogue.text = $"{enemyUnit.unitData.DisplayName} will take initiative!";
             yield return new WaitForSeconds(2f);
 
             state = BattleState.ENEMYTURN;
@@ -77,7 +77,7 @@ public class BattleSystem : MonoBehaviour
             }
             else
             {
-                dialogue.text = $"{enemyUnit.unitData.displayName} was just faster!";
+                dialogue.text = $"{enemyUnit.unitData.DisplayName} was just faster!";
                 yield return new WaitForSeconds(2f);
                 state = BattleState.ENEMYTURN;
                 StartCoroutine(EnemyTurn());
@@ -321,27 +321,27 @@ public class BattleSystem : MonoBehaviour
     #region Status to apply to enemy
     IEnumerator UnitBurn(UnitInstance unitAttacking, UnitInstance unitDefending, string moveName, bool isStatusApplied)
     {
-        dialogue.text = $"{unitAttacking.unitData.displayName} used {moveName}!";
+        dialogue.text = $"{unitAttacking.unitData.DisplayName} used {moveName}!";
         yield return new WaitForSeconds(2f);
         if (isStatusApplied)
         {
             enemyHUD.UpdateStatusEffect(enemyUnit);
             playerHUD.UpdateStatusEffect(playerUnit);
-            dialogue.text = $"{unitDefending.unitData.displayName} has been burned!";
+            dialogue.text = $"{unitDefending.unitData.DisplayName} has been burned!";
         }
         else
         {
             if (unitDefending.GetUnitStatusEffect() == StatusEffect.BURN)
             {
-                dialogue.text = $"{unitDefending.unitData.displayName} is already burned!";
+                dialogue.text = $"{unitDefending.unitData.DisplayName} is already burned!";
             }
             else if (unitDefending.GetUnitStatusEffect() != StatusEffect.NONE)
             {
-                dialogue.text = $"{unitDefending.unitData.displayName} cannot have more than one status effects!";
+                dialogue.text = $"{unitDefending.unitData.DisplayName} cannot have more than one status effects!";
             }
             else
             {
-                dialogue.text = $"{unitAttacking.unitData.displayName} missed!";
+                dialogue.text = $"{unitAttacking.unitData.DisplayName} missed!";
             }
         }
         yield return new WaitForSeconds(2f);
@@ -349,7 +349,7 @@ public class BattleSystem : MonoBehaviour
     }
     IEnumerator UnitPoison(UnitInstance unitAttacking, UnitInstance unitDefending, string moveName, bool isStatusApplied)
     {
-        dialogue.text = $"{unitAttacking.unitData.displayName} used {moveName}!";
+        dialogue.text = $"{unitAttacking.unitData.DisplayName} used {moveName}!";
         yield return new WaitForSeconds(2f);
         if (isStatusApplied)
         {
@@ -361,15 +361,15 @@ public class BattleSystem : MonoBehaviour
         {
             if (unitDefending.GetUnitStatusEffect() == StatusEffect.POISON)
             {
-                dialogue.text = $"{unitDefending.unitData.displayName} is already poisoned!";
+                dialogue.text = $"{unitDefending.unitData.DisplayName} is already poisoned!";
             }
             else if (unitDefending.GetUnitStatusEffect() != StatusEffect.NONE)
             {
-                dialogue.text = $"{unitDefending.unitData.displayName} cannot have 2 status effects!";
+                dialogue.text = $"{unitDefending.unitData.DisplayName} cannot have 2 status effects!";
             }
             else
             {
-                dialogue.text = $"{unitAttacking.unitData.displayName} missed!";
+                dialogue.text = $"{unitAttacking.unitData.DisplayName} missed!";
             }
         }
         yield return new WaitForSeconds(2f);
@@ -377,7 +377,7 @@ public class BattleSystem : MonoBehaviour
     }
     IEnumerator UnitSleep(UnitInstance unitAttacking, UnitInstance unitDefending, string moveName, bool isStatusApplied)
     {
-        dialogue.text = $"{unitAttacking.unitData.displayName} used {moveName}!";
+        dialogue.text = $"{unitAttacking.unitData.DisplayName} used {moveName}!";
         yield return new WaitForSeconds(2f);
         if (isStatusApplied)
         {
@@ -389,15 +389,15 @@ public class BattleSystem : MonoBehaviour
         {
             if (unitDefending.GetUnitStatusEffect() != StatusEffect.SLEEP)
             {
-                dialogue.text = $"{unitDefending.unitData.displayName} is already asleep!";
+                dialogue.text = $"{unitDefending.unitData.DisplayName} is already asleep!";
             }
             else if (unitDefending.GetUnitStatusEffect() != StatusEffect.NONE)
             {
-                dialogue.text = $"{unitDefending.unitData.displayName} cannot have 2 status effects!";
+                dialogue.text = $"{unitDefending.unitData.DisplayName} cannot have 2 status effects!";
             }
             else
             {
-                dialogue.text = $"{unitAttacking.unitData.displayName} missed!";
+                dialogue.text = $"{unitAttacking.unitData.DisplayName} missed!";
             }
         }
         yield return new WaitForSeconds(2f);
@@ -405,27 +405,27 @@ public class BattleSystem : MonoBehaviour
     }
     IEnumerator UnitFrozen(UnitInstance unitAttacking, UnitInstance unitDefending, string moveName, bool isStatusApplied)
     {
-        dialogue.text = $"{unitAttacking.unitData.displayName} used {moveName}!";
+        dialogue.text = $"{unitAttacking.unitData.DisplayName} used {moveName}!";
         yield return new WaitForSeconds(2f);
         if (isStatusApplied)
         {
             enemyHUD.UpdateStatusEffect(enemyUnit);
             playerHUD.UpdateStatusEffect(playerUnit);
-            dialogue.text = $"{unitDefending.unitData.displayName} is frozen solid!";
+            dialogue.text = $"{unitDefending.unitData.DisplayName} is frozen solid!";
         }
         else
         {
             if (unitDefending.GetUnitStatusEffect() == StatusEffect.FROZEN)
             {
-                dialogue.text = $"{unitDefending.unitData.displayName} is already frozen!";
+                dialogue.text = $"{unitDefending.unitData.DisplayName} is already frozen!";
             }
             else if (unitDefending.GetUnitStatusEffect() != StatusEffect.NONE)
             {
-                dialogue.text = $"{unitDefending.unitData.displayName} cannot have 2 status effects!";
+                dialogue.text = $"{unitDefending.unitData.DisplayName} cannot have 2 status effects!";
             }
             else
             {
-                dialogue.text = $"{unitAttacking.unitData.displayName} missed!";
+                dialogue.text = $"{unitAttacking.unitData.DisplayName} missed!";
             }
         }
         yield return new WaitForSeconds(2f);
@@ -433,27 +433,27 @@ public class BattleSystem : MonoBehaviour
     }
     IEnumerator UnitParalysis(UnitInstance unitAttacking, UnitInstance unitDefending, string moveName, bool isStatusApplied)
     {
-        dialogue.text = $"{unitAttacking.unitData.displayName} used {moveName}!";
+        dialogue.text = $"{unitAttacking.unitData.DisplayName} used {moveName}!";
         yield return new WaitForSeconds(2f);
         if (isStatusApplied)
         {
             enemyHUD.UpdateStatusEffect(enemyUnit);
             playerHUD.UpdateStatusEffect(playerUnit);
-            dialogue.text = $"{unitDefending.unitData.displayName} is paralysed!";
+            dialogue.text = $"{unitDefending.unitData.DisplayName} is paralysed!";
         }
         else
         {
             if (enemyUnit.GetUnitStatusEffect() == StatusEffect.PARALYSIS)
             {
-                dialogue.text = $"{unitDefending.unitData.displayName} is already paralysed!";
+                dialogue.text = $"{unitDefending.unitData.DisplayName} is already paralysed!";
             }
             else if (enemyUnit.GetUnitStatusEffect() != StatusEffect.NONE)
             {
-                dialogue.text = $"{unitDefending.unitData.displayName} cannot have 2 status effects!";
+                dialogue.text = $"{unitDefending.unitData.DisplayName} cannot have 2 status effects!";
             }
             else
             {
-                dialogue.text = $"{unitAttacking.unitData.displayName} missed!";
+                dialogue.text = $"{unitAttacking.unitData.DisplayName} missed!";
             }
         }
         yield return new WaitForSeconds(2f);
@@ -462,7 +462,7 @@ public class BattleSystem : MonoBehaviour
     #endregion
     IEnumerator UnitAttack(UnitInstance unitAttacking, UnitInstance unitDefending, MovesData moveData)
     {
-        dialogue.text = $"{unitAttacking.unitData.displayName} used {moveData.moveName}!";
+        dialogue.text = $"{unitAttacking.unitData.DisplayName} used {moveData.moveName}!";
         yield return new WaitForSeconds(2f);
         //IMPLEMENT: Damage dealt to defender unit
         bool isDead = false;
@@ -536,7 +536,7 @@ public class BattleSystem : MonoBehaviour
             }
         }
 
-        dialogue.text = $"{enemyUnit.unitData.displayName} is thinking!";
+        dialogue.text = $"{enemyUnit.unitData.DisplayName} is thinking!";
         yield return new WaitForSeconds(2f);
         MoveManager(enemyUnit.GetRandomMove());
 
@@ -577,7 +577,7 @@ public class BattleSystem : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         if (state == BattleState.WON)
-            dialogue.text = $"{enemyUnit.unitData.displayName} has drop some items!";
+            dialogue.text = $"{enemyUnit.unitData.DisplayName} has drop some items!";
         else
             Debug.LogError("THIS STATE SHOULD BE ONLY WON. In enemey drop BattleSystem Script");
         yield return new WaitForSeconds(2f);
@@ -595,12 +595,12 @@ public class BattleSystem : MonoBehaviour
     {
         if (state == BattleState.WON)
         {
-            dialogue.text = $"You defeated {enemyUnit.unitData.displayName}!";
+            dialogue.text = $"You defeated {enemyUnit.unitData.DisplayName}!";
             StartCoroutine(EnemeyDrop());
         }
         else if (state == BattleState.LOST)
         {
-            dialogue.text = $"You were defeated by {enemyUnit.unitData.displayName}!";
+            dialogue.text = $"You were defeated by {enemyUnit.unitData.DisplayName}!";
             StartCoroutine(ReturnToMenu());
         }
     }

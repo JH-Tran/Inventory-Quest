@@ -82,7 +82,7 @@ public class PlayerInformation : MonoBehaviour
             playerUnitInstance.SetUnitHealthToMaxHealth();
         }
         Debug.Log($"PLAYER CURRENT HEALTH: {playerUnitInstance.currentUnitHealth}");
-        Debug.Log($"HP: {playerUnitInstance.maxHp}, ATTACK: {playerUnitInstance.attack}, SpATTACK: {playerUnitInstance.playerSpecialAttack}, Defence: {playerUnitInstance.playerDefence}, SpDefence: {playerUnitInstance.playerSpecialDefence}, Speed: {playerUnitInstance.playerSpeed + playerUnitInstance.unitData.speed}");
+        Debug.Log($"HP: {playerUnitInstance.maxHp}, ATTACK: {playerUnitInstance.attack}, SpATTACK: {playerUnitInstance.playerSpecialAttack}, Defence: {playerUnitInstance.playerDefence}, SpDefence: {playerUnitInstance.playerSpecialDefence}, Speed: {playerUnitInstance.playerSpeed + playerUnitInstance.unitData.Speed}");
     }
     private void UpdatePlayerStat(UnitStats stat, int value)
     {

@@ -25,7 +25,7 @@ public class InventoryStatUserInterface : MonoBehaviour
         playerSpecialAttackTextMesh.text = $"Special Attack: {playerUnitInstance.specialAttack}";
         playerDefenceTextMesh.text = $"Defence: {playerUnitInstance.defence}";
         playerSpecialDefenceTextMesh.text = $"Special Defence: {playerUnitInstance.specialDefence}";
-        playerSpeedTextMesh.text = $"Speed: {playerUnitInstance.unitData.speed + playerUnitInstance.playerSpeed}";
+        playerSpeedTextMesh.text = $"Speed: {playerUnitInstance.unitData.Speed + playerUnitInstance.playerSpeed}";
     }
 
     public void UpdateItemAboutUserInterface(InventoryItem inventoryItem)

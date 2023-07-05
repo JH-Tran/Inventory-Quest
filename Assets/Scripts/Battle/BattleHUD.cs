@@ -14,11 +14,11 @@ public class BattleHUD : MonoBehaviour
 
     public void SetHUD(UnitInstance unit)
     {
-        nameText.text = unit.unitData.displayName;
+        nameText.text = unit.unitData.DisplayName;
         levelText.text = $"Lv.{unit.Level}";
         UpdateStatusEffect(unit);
         SetHP(unit);
-        unitImage.sprite = unit.unitData.unitSprite;
+        unitImage.sprite = unit.unitData.UnitSprite;
     }
     public void SetHP(UnitInstance unit)
     {

@@ -5,28 +5,43 @@ using UnityEngine;
 public class UnitData : ScriptableObject
 {
     //Unit label
-    public string id;
-    public string displayName;
-    public Sprite unitSprite;
-    public Color unitColour = Color.white;
+    [SerializeField] string id;
+    [SerializeField] string displayName;
+    [SerializeField] Sprite unitSprite;
+    [SerializeField] Color unitColour = Color.white;
     [TextArea]
     public string description;
     //Unit starting combat values
-    public int startingLevel = 1;
-    public int maxHealthPoint;
-    public int attack;
-    public int specialAttack;
-    public int defence;
-    public int specialDefence;
-    public int speed;
+    [SerializeField] int startingLevel = 1;
+    [SerializeField] int maxHealthPoint;
+    [SerializeField] int attack;
+    [SerializeField] int specialAttack;
+    [SerializeField] int defence;
+    [SerializeField] int specialDefence;
+    [SerializeField] int speed;
     //Unit elementl type
-    public ElementTypes type1;
-    public ElementTypes type2;
+    [SerializeField] ElementTypes type1;
+    [SerializeField] ElementTypes type2;
     //Status effects
-    public bool isConfused;
-    public bool isBound;
+    [SerializeField] bool isConfused;
+    [SerializeField] bool isBound;
     //Moves
-    public List<MovesData> dropMoveList = new(4);
+    [SerializeField] List<MovesData> dropMoveList = new(4);
+    //Experience
+    [SerializeField] int baseExperience;
+
+    public int MaxHealthPoint => maxHealthPoint;
+    public int Attack => attack;
+    public int SpecialAttack => specialAttack;
+    public int Defence => defence;
+    public int SpecialDefence => specialDefence;
+    public int Speed => speed;
+    public string DisplayName => displayName;
+    public int StartingLevel => startingLevel;
+    public List<MovesData> DropMoveList => dropMoveList;
+    public ElementTypes Type1 => type1;
+    public ElementTypes Type2 => type2;
+    public Sprite UnitSprite => unitSprite;
 }
 
 //Status effect that can only be one at a time

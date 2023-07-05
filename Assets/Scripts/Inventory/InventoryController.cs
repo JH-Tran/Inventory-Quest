@@ -18,7 +18,7 @@ public class InventoryController : MonoBehaviour
     [SerializeField] GridManager dropGridManager;
     [SerializeField] InventoryStatUserInterface inventoryStatUI;
     [SerializeField] PlayerInformation playerInformation;
-    private GearData gearData = new();
+    private GearData gearData;
 
     InventoryItem selectedItem;
     InventoryItem overlapItem;
@@ -45,6 +45,7 @@ public class InventoryController : MonoBehaviour
     private void Awake()
     {
         inventoryHighlight = GetComponent<InventoryHighlight>();
+        gearData = gameObject.AddComponent<GearData>();
     }
 
     // Update is called once per frame
@@ -184,6 +185,14 @@ public class InventoryController : MonoBehaviour
         if (inventoryItem.data.itemClass == ItemClassification.Head || inventoryItem.data.itemClass == ItemClassification.Chest || inventoryItem.data.itemClass == ItemClassification.Leg)
         {
             AddGearStat(inventoryItem);
+        }
+        else if (inventoryItem.data.itemClass == ItemClassification.Weapon)
+        {
+
+        }
+        else if (inventoryItem.data.itemClass == ItemClassification.Consumable)
+        {
+
         }
         return inventoryItem;
     }

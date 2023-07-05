@@ -40,25 +40,25 @@ public class UnitInstance : MonoBehaviour
     private bool isDefenderTakeCriticalHit;
     public int attack
     {
-        get { return (Mathf.FloorToInt((unitData.attack * level) / 100f) + 5) + _playerAttack; }
+        get { return (Mathf.FloorToInt((unitData.Attack * level) / 100f) + 5) + _playerAttack; }
     }
     public int defence
     {
-        get { return (Mathf.FloorToInt((unitData.defence * level) / 100f) + 5) + _playerDefence; }
+        get { return (Mathf.FloorToInt((unitData.Defence * level) / 100f) + 5) + _playerDefence; }
     }
     public int specialAttack
     {
-        get { return (Mathf.FloorToInt((unitData.specialAttack * level) / 100f) + 5) + _playerSpecialAttack
+        get { return (Mathf.FloorToInt((unitData.SpecialAttack * level) / 100f) + 5) + _playerSpecialAttack
                 
                 ; }
     } 
     public int specialDefence
     {
-        get { return (Mathf.FloorToInt((unitData.specialDefence * level) / 100f) + 5) + playerSpecialDefence; }
+        get { return (Mathf.FloorToInt((unitData.SpecialDefence * level) / 100f) + 5) + playerSpecialDefence; }
     }
     public int maxHp
     {
-        get { return (Mathf.FloorToInt((unitData.maxHealthPoint * level) / 100f) + 5) + _playerMaxHp; }
+        get { return (Mathf.FloorToInt((unitData.MaxHealthPoint * level) / 100f) + 5) + _playerMaxHp; }
     }
 
     private int _playerAttack = 0;
@@ -78,13 +78,13 @@ public class UnitInstance : MonoBehaviour
     {
         if (unitData != null)
         {
-            level = unitData.startingLevel;
+            level = unitData.StartingLevel;
             currentUnitHealth = maxHp;
         }
     }
     public void SetUnitHealth()
     {
-        level = unitData.startingLevel;
+        level = unitData.StartingLevel;
         currentUnitHealth = maxHp;
     }
     public void SetUnitHealthToMaxHealth()
@@ -145,7 +145,7 @@ public class UnitInstance : MonoBehaviour
         switch (unitStatusEffect)
         {
             case StatusEffect.BURN:
-                statusEffectString = $"{unitData.displayName} suffered from burning!";
+                statusEffectString = $"{unitData.DisplayName} suffered from burning!";
                 Debug.Log($"BURN MESSAGE: {statusEffectString}");
                 tickDamage = Mathf.FloorToInt(maxHp * burnDamageMultiplier);
                 if (tickDamage < 1)
@@ -159,9 +159,9 @@ public class UnitInstance : MonoBehaviour
                     poisonCount++;
                 }
                 if (poisonCount == 1)
-                    statusEffectString = $"{unitData.displayName} suffered from poison!";
+                    statusEffectString = $"{unitData.DisplayName} suffered from poison!";
                 else
-                    statusEffectString = $"{unitData.displayName} suffered from poison badly!";
+                    statusEffectString = $"{unitData.DisplayName} suffered from poison badly!";
                 tickDamage = Mathf.FloorToInt(poisonCount * maxHp * poisonDamageMultiplier);
                 if (tickDamage < 1)
                     tickDamage = 1;
@@ -182,13 +182,13 @@ public class UnitInstance : MonoBehaviour
             if ((unitStatusEffect == StatusEffect.SLEEP && RandomRoller(100, wakeUpChance)) || (unitStatusEffect == StatusEffect.FROZEN && RandomRoller(100, thawedChance)))
             {
                 unitStatusEffect = StatusEffect.NONE;
-                statusEffectString = $"{unitData.displayName} woke up!";
+                statusEffectString = $"{unitData.DisplayName} woke up!";
                 return false;
             }
             if (unitStatusEffect == StatusEffect.SLEEP)
-                statusEffectString = $"{unitData.displayName} is still asleep!";
+                statusEffectString = $"{unitData.DisplayName} is still asleep!";
             else if (unitStatusEffect == StatusEffect.FROZEN)
-                statusEffectString = $"{unitData.displayName} is still frozen!";
+                statusEffectString = $"{unitData.DisplayName} is still frozen!";
             turnDownCount += 1;
             Debug.Log($"{unitStatusEffect} TURN COUNT: {turnDownCount}");
             return true;
@@ -197,7 +197,7 @@ public class UnitInstance : MonoBehaviour
         {
             if (RandomRoller(100, paralysisPassTurnChance))
             {
-                statusEffectString = $"{unitData.displayName} is unable to move!";
+                statusEffectString = $"{unitData.DisplayName} is unable to move!";
                 return true;
             }
         }
@@ -205,9 +205,9 @@ public class UnitInstance : MonoBehaviour
         {
             unitStatusEffect = StatusEffect.NONE;
             if (unitStatusEffect == StatusEffect.SLEEP)
-                statusEffectString = $"{unitData.displayName} woke up!";
+                statusEffectString = $"{unitData.DisplayName} woke up!";
             else if (unitStatusEffect == StatusEffect.FROZEN)
-                statusEffectString = $"{unitData.displayName} thawed out!";
+                statusEffectString = $"{unitData.DisplayName} thawed out!";
             return true;
         }
         statusEffectString = "";
@@ -229,12 +229,12 @@ public class UnitInstance : MonoBehaviour
     }
     public bool TakePhysicalDamage(ElementTypes moveElementType, int attackerAttack, int attackerLevel, int movePower, float burnMultiplier)
     {
-        float type1Reaction = CalculateElementEffectiveMultiplier(moveElementType, unitData.type1);
+        float type1Reaction = CalculateElementEffectiveMultiplier(moveElementType, unitData.Type1);
         moveEffectivenessType1 = SetTypeEffectiveness(type1Reaction);
         float calculatedDamage = (((2 * attackerLevel / 5) + 2) * movePower * (attackerAttack / defence) / 50 + 2) * type1Reaction * CalculateCriticalMultiplier() * burnMultiplier;
-        if (unitData.type2 != ElementTypes.NONE)
+        if (unitData.Type2 != ElementTypes.NONE)
         {
-            float type2Reaction = CalculateElementEffectiveMultiplier(moveElementType, unitData.type2);
+            float type2Reaction = CalculateElementEffectiveMultiplier(moveElementType, unitData.Type2);
             calculatedDamage *= type2Reaction;
             moveEffectivenessType2 = SetTypeEffectiveness(type2Reaction);
         }
@@ -261,11 +261,11 @@ public class UnitInstance : MonoBehaviour
     }
     public bool TakeSpecialDamage(ElementTypes moveElementType, int specialAttack, int attackerLevel, int movePower, float burnMultiplier)
     {
-        float type1Reaction = CalculateElementEffectiveMultiplier(moveElementType, unitData.type1);
+        float type1Reaction = CalculateElementEffectiveMultiplier(moveElementType, unitData.Type1);
         float calculatedDamage = (((2 * attackerLevel / 5) + 2) * movePower * (specialAttack / specialDefence) / 50 + 2) * type1Reaction * CalculateCriticalMultiplier() * burnMultiplier;
-        if (unitData.type2 != ElementTypes.NONE)
+        if (unitData.Type2 != ElementTypes.NONE)
         {
-            float type2Reaction = CalculateElementEffectiveMultiplier(moveElementType, unitData.type2);
+            float type2Reaction = CalculateElementEffectiveMultiplier(moveElementType, unitData.Type2);
             calculatedDamage *= type2Reaction;
         }
         if (calculatedDamage >= 1)
@@ -353,14 +353,14 @@ public class UnitInstance : MonoBehaviour
     }
     public MovesData GetRandomMove()
     {
-        int randomNum = Random.Range(0, unitData.dropMoveList.Count);
+        int randomNum = Random.Range(0, unitData.DropMoveList.Count);
         Debug.Log(randomNum);
-        return unitData.dropMoveList[randomNum];
+        return unitData.DropMoveList[randomNum];
     }
     public ElementEffectiveness GetMoveEffectiveness()
     {
         //if the unit is mono type just return the type 1 effectiveness.
-        if (unitData.type2 == ElementTypes.NONE) { return moveEffectivenessType1; }
+        if (unitData.Type2 == ElementTypes.NONE) { return moveEffectivenessType1; }
 
         if (moveEffectivenessType1 == ElementEffectiveness.SUPEREFFECTIVE && moveEffectivenessType2 == ElementEffectiveness.SUPEREFFECTIVE)
             return ElementEffectiveness.SUPEREFFECTIVE;
