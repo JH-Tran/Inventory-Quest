@@ -581,22 +581,26 @@ public class BattleSystem : MonoBehaviour
         else
             Debug.LogError("THIS STATE SHOULD BE ONLY WON. In enemey drop BattleSystem Script");
         yield return new WaitForSeconds(2f);
-        OnButtonSetInventoryActive();
-        inventoryMenu.GetComponent<InventoryButtonManager>().OpenInventoryAfterBattle();
-        inventoryController.InsertRandomItemInDropGrid();
-        if (enemyUnit.IsUnitDropReward())
-        {
-            Debug.Log("GAIN BONUS DROP REWARD");
-            inventoryController.InsertItemInDropGrid(null,enemyUnit.GetRandomMove());
-        }
-        gameObject.SetActive(false);
+        InventoryDrop();
+
+    }
+    IEnumerator PlayerExperience()
+    {
+        yield return new WaitForSeconds(2f);
+        int baseExperience = enemyUnit.unitData.BaseExperience;
+        int enemyLevel = enemyUnit.Level;
+        float bossBonus = (enemyUnit.unitData.IsBoss) ? 1.5f : 1f;
+        int experienceGain = Mathf.FloorToInt((baseExperience * enemyLevel * bossBonus) / 7);
+        dialogue.text = $"{playerUnit.name} has gain {experienceGain} exp";
+        StartCoroutine(EnemeyDrop());
+
     }
     private void EndBattle()
     {
         if (state == BattleState.WON)
         {
             dialogue.text = $"You defeated {enemyUnit.unitData.DisplayName}!";
-            StartCoroutine(EnemeyDrop());
+            StartCoroutine(PlayerExperience());
         }
         else if (state == BattleState.LOST)
         {
@@ -630,5 +634,17 @@ public class BattleSystem : MonoBehaviour
             state = BattleState.PLAYERTURN;
             PlayerTurn();
         }
+    }
+    private void InventoryDrop()
+    {
+        OnButtonSetInventoryActive();
+        inventoryMenu.GetComponent<InventoryButtonManager>().OpenInventoryAfterBattle();
+        inventoryController.InsertRandomItemInDropGrid();
+        if (enemyUnit.IsUnitDropReward())
+        {
+            Debug.Log("GAIN BONUS DROP REWARD");
+            inventoryController.InsertItemInDropGrid(null, enemyUnit.GetRandomMove());
+        }
+        gameObject.SetActive(false);
     }
 }

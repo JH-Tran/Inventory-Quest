@@ -8,6 +8,7 @@ public class UnitInstance : MonoBehaviour
     [SerializeField]
     public int currentUnitHealth = 1;
     private int level = 1;
+    private int experience;
     public int Level => level;
 
     [SerializeField]private StatusEffect unitStatusEffect = StatusEffect.NONE;
@@ -48,9 +49,7 @@ public class UnitInstance : MonoBehaviour
     }
     public int specialAttack
     {
-        get { return (Mathf.FloorToInt((unitData.SpecialAttack * level) / 100f) + 5) + _playerSpecialAttack
-                
-                ; }
+        get { return (Mathf.FloorToInt((unitData.SpecialAttack * level) / 100f) + 5) + _playerSpecialAttack; }
     } 
     public int specialDefence
     {
@@ -60,7 +59,6 @@ public class UnitInstance : MonoBehaviour
     {
         get { return (Mathf.FloorToInt((unitData.MaxHealthPoint * level) / 100f) + 5) + _playerMaxHp; }
     }
-
     private int _playerAttack = 0;
     private int _playerDefence = 0;
     private int _playerSpecialAttack = 0;
@@ -74,13 +72,32 @@ public class UnitInstance : MonoBehaviour
     public int playerMaxHp { get => _playerMaxHp; set { _playerMaxHp = value; } }
     public int playerSpeed { get => _playerSpeed; set { _playerSpeed = value; } }
 
-    public void Start()
+    public void Initalise()
     {
-        if (unitData != null)
+        level = unitData.StartingLevel;
+        currentUnitHealth = maxHp;
+        SetUnitHealth();
+        experience = GetExperienceForLevel(level);
+    }
+    public int GetExperienceForLevel(int level)
+    {
+        if (unitData.GrowthRate == GrowthRate.FAST)
         {
-            level = unitData.StartingLevel;
-            currentUnitHealth = maxHp;
+            return 4 * (level * level * level) / 5;
         }
+        else if (unitData.GrowthRate == GrowthRate.MEDIUMFAST)
+        {
+            return level * level * level;
+        }
+        else if (unitData.GrowthRate == GrowthRate.MEDIUMSLOW)
+        {
+            return (6 / 5) * (level * level * level) - 15 * (level * level) + 100 * level - 140;
+        }
+        else if (unitData.GrowthRate == GrowthRate.SLOW)
+        {
+            return (5 * (level * level * level)) / 4;
+        }
+        return -1;
     }
     public void SetUnitHealth()
     {
@@ -374,10 +391,3 @@ public class UnitInstance : MonoBehaviour
             return ElementEffectiveness.NONE;
     }
 }
-
-public enum ElementEffectiveness
-{
-    NONE,
-    SUPEREFFECTIVE,
-    NOTEFFECTIVE
-};

@@ -15,7 +15,7 @@ public class PlayerInformation : MonoBehaviour
 
     public void Start()
     {
-        playerUnitInstance.SetUnitHealth();
+        playerUnitInstance.Initalise();
     }
 
     public void InitiatePlayerMoves()

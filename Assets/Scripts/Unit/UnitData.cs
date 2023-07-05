@@ -29,6 +29,8 @@ public class UnitData : ScriptableObject
     [SerializeField] List<MovesData> dropMoveList = new(4);
     //Experience
     [SerializeField] int baseExperience;
+    [SerializeField] GrowthRate growthRate;
+    [SerializeField] bool isBoss;
 
     public int MaxHealthPoint => maxHealthPoint;
     public int Attack => attack;
@@ -42,6 +44,10 @@ public class UnitData : ScriptableObject
     public ElementTypes Type1 => type1;
     public ElementTypes Type2 => type2;
     public Sprite UnitSprite => unitSprite;
+    public int BaseExperience => baseExperience;
+    public GrowthRate GrowthRate => growthRate;
+    public bool IsBoss => isBoss;
+
 }
 
 //Status effect that can only be one at a time
@@ -75,3 +81,16 @@ public enum UnitStats
     SPECIALDEFENCE, 
     SPEED,
 }
+public enum GrowthRate
+{
+    FAST,
+    MEDIUMFAST,
+    MEDIUMSLOW,
+    SLOW
+}
+public enum ElementEffectiveness
+{
+    NONE,
+    SUPEREFFECTIVE,
+    NOTEFFECTIVE
+};
