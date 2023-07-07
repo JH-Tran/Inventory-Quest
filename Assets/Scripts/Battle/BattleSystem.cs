@@ -494,35 +494,44 @@ public class BattleSystem : MonoBehaviour
         yield return new WaitForSeconds(2f);
         //IMPLEMENT: Damage dealt to defender unit
         bool isDead = false;
-        if(moveData.moveType == MoveType.PHYSICAL)
+        if (unitAttacking.AttackAccuracy(moveData.accuracy))
         {
-            isDead = unitAttacking.PhysicalAttack(unitDefending, moveData.elementalType, moveData.power);
+            if (moveData.moveType == MoveType.PHYSICAL)
+            {
+                isDead = unitAttacking.PhysicalAttack(unitDefending, moveData.elementalType, moveData.power);
+            }
+            else if (moveData.moveType == MoveType.SPECIAL)
+            {
+                isDead = unitAttacking.SpecialAttack(unitDefending, moveData.elementalType, moveData.power);
+            }
+
+            StartCoroutine(enemyHUD.SetHealthSmooth(enemyUnit));
+            StartCoroutine(playerHUD.SetHealthSmooth(playerUnit));
+            yield return new WaitForSeconds(2f);
+            ElementEffectiveness MoveEffectivenessToUnitDefending = unitDefending.GetMoveEffectiveness();
+            if (MoveEffectivenessToUnitDefending == ElementEffectiveness.SUPEREFFECTIVE)
+            {
+                dialogue.text = "It was super effective!";
+                yield return new WaitForSeconds(2f);
+            }
+            else if (MoveEffectivenessToUnitDefending == ElementEffectiveness.NOTEFFECTIVE)
+            {
+                dialogue.text = "It was not effective!";
+                yield return new WaitForSeconds(2f);
+            }
+
+            if (unitDefending.IsUnitCriticalAttack() == true)
+            {
+                dialogue.text = "Critical Hit!";
+                yield return new WaitForSeconds(2f);
+            }
         }
-        else if (moveData.moveType == MoveType.SPECIAL)
+        else
         {
-            isDead = unitAttacking.SpecialAttack(unitDefending, moveData.elementalType, moveData.power);
+            SetDialogueText(true, $"{unitAttacking.unitData.DisplayName} missed their attack!");
+            yield return new WaitForSeconds(2f);
         }
 
-        StartCoroutine(enemyHUD.SetHealthSmooth(enemyUnit));
-        StartCoroutine(playerHUD.SetHealthSmooth(playerUnit));
-        yield return new WaitForSeconds(2f);
-        ElementEffectiveness MoveEffectivenessToUnitDefending = unitDefending.GetMoveEffectiveness();
-        if (MoveEffectivenessToUnitDefending == ElementEffectiveness.SUPEREFFECTIVE)
-        {
-            dialogue.text = "It was super effective!";
-            yield return new WaitForSeconds(2f);
-        }
-        else if (MoveEffectivenessToUnitDefending == ElementEffectiveness.NOTEFFECTIVE)
-        {
-            dialogue.text = "It was not effective!";
-            yield return new WaitForSeconds(2f);
-        }
-
-        if (unitDefending.IsUnitCriticalAttack() == true)
-        {
-            dialogue.text = "Critical Hit!";
-            yield return new WaitForSeconds(2f);
-        }
         PassTurn(isDead);
     }
     IEnumerator EnemyTurn()

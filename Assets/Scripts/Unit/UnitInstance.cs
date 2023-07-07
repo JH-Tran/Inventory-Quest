@@ -159,7 +159,7 @@ public class UnitInstance : MonoBehaviour
         }
         else
         {
-            if (RandomRoller(100, accuarcy))
+            if (RandomRoller(accuarcy))
             {
                 unitTakingStatusEffect.unitStatusEffect = statusEffect;
                 //Debug.Log($"{statusEffect} has applied to {unitTakingStatusEffect.name} with a {accuarcy}% chance.");
@@ -235,7 +235,7 @@ public class UnitInstance : MonoBehaviour
         }
         else if (unitStatusEffect == StatusEffect.PARALYSIS)
         {
-            if (RandomRoller(100, paralysisPassTurnChance))
+            if (RandomRoller(paralysisPassTurnChance))
             {
                 statusEffectString = $"{unitData.DisplayName} is unable to move!";
                 return true;
@@ -363,7 +363,7 @@ public class UnitInstance : MonoBehaviour
     }
     public float CalculateCriticalMultiplier()
     {
-        if (RandomRoller(maxCriticalChance, criticalRate))
+        if (RandomRoller(criticalRate, maxCriticalChance))
         {
             Debug.Log("CRIT!");
             isDefenderTakeCriticalHit = true;
@@ -373,7 +373,7 @@ public class UnitInstance : MonoBehaviour
         isDefenderTakeCriticalHit = false;
         return 1;
     }
-    private bool RandomRoller(int maxRange, int chanceRate)
+    private bool RandomRoller(int chanceRate, int maxRange = 100)
     {
         int randomDigit = Random.Range(1, maxRange + 1);
         //Debug.Log($"RR: {randomDigit} || {chanceRate}");
@@ -389,7 +389,7 @@ public class UnitInstance : MonoBehaviour
 
     public bool IsUnitDropReward()
     {
-        return RandomRoller(100,50);
+        return RandomRoller(50);
     }
     public MovesData GetRandomMove()
     {
@@ -412,5 +412,10 @@ public class UnitInstance : MonoBehaviour
             return ElementEffectiveness.NOTEFFECTIVE;
         else
             return ElementEffectiveness.NONE;
+    }
+
+    public bool AttackAccuracy(int moveAccuracy)
+    {
+        return RandomRoller(moveAccuracy);
     }
 }
