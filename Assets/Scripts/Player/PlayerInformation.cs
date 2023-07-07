@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+
 public class PlayerInformation : MonoBehaviour
 {
     public UnitInstance playerUnitInstance;
@@ -11,13 +12,18 @@ public class PlayerInformation : MonoBehaviour
     public GameObject chestGrid;
     public GameObject legGrid;
     public GameObject weaponGrid;
+    
     private bool isMoveInitalised = false;
 
     public void Start()
     {
         playerUnitInstance.Initalise();
     }
-
+    public void OnButtonRestPlayer()
+    {
+        playerUnitInstance.currentUnitHealth = playerUnitInstance.maxHp;
+        playerUnitInstance.RemoveUnitStatusEffect();
+    }
     public void InitiatePlayerMoves()
     {
         if (!isMoveInitalised)

@@ -19,5 +19,5 @@ MonoBehaviour:
   accuracy: 100
   elementalType: 2
   statusEffect: 3
-  statusAccuracy: 95
+  statusAccuracy: 85
   unitStats: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RedFish
   m_EditorClassIdentifier: 
   id: Unit_RedFish
-  displayName: Red Shark
+  displayName: Lit Shark
   unitSprite: {fileID: 21300000, guid: 5e12a4abe42f510468347c2d3b5b4c1e, type: 3}
   unitColour: {r: 1, g: 1, b: 1, a: 0}
   description: Treading in deep water
@@ -29,6 +29,9 @@ MonoBehaviour:
   isConfused: 0
   isBound: 0
   dropMoveList:
-  - {fileID: 11400000, guid: cc24a6da6e443694cb23376356f6e90b, type: 2}
-  - {fileID: 11400000, guid: a8c702eec3ca9ef4f88bae766ce0eb44, type: 2}
+  - {fileID: 11400000, guid: 2b6fd5e282ecb954eb0cc47965128180, type: 2}
   - {fileID: 11400000, guid: d0f3d72b502ae744080613416298c234, type: 2}
+  - {fileID: 11400000, guid: a8c702eec3ca9ef4f88bae766ce0eb44, type: 2}
+  baseExperience: 62
+  growthRate: 2
+  isBoss: 0

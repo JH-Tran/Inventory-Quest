@@ -8,9 +8,8 @@ public class UnitInstance : MonoBehaviour
     [SerializeField]
     public int currentUnitHealth = 1;
     private int level = 1;
-    private int experience;
+    public int experience;
     public int Level => level;
-
     [SerializeField]private StatusEffect unitStatusEffect = StatusEffect.NONE;
     public int turnDownCount = 0;
     public int poisonCount = 0;
@@ -79,6 +78,26 @@ public class UnitInstance : MonoBehaviour
         SetUnitHealth();
         experience = GetExperienceForLevel(level);
     }
+    public void AddLevel(int level)
+    {
+        this.level += level;
+    }
+    public bool CheckForLevelUp()
+    {
+        if (experience > GetExperienceForLevel(level + 1))
+        {
+            ++level;
+            return true;
+        }
+        return false;
+    }
+    public float GetNormalizeExperience()
+    {
+        int currentLevelExp = GetExperienceForLevel(Level);
+        int nextLevelExp = GetExperienceForLevel(Level + 1);
+        return (float)(experience - currentLevelExp) / (nextLevelExp - currentLevelExp);
+    }
+
     public int GetExperienceForLevel(int level)
     {
         if (unitData.GrowthRate == GrowthRate.FAST)

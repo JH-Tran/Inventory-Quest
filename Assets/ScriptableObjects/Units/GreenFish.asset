@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bafb87d8ff2341f458812e753a093771, type: 3}
+  m_Name: GreenFish
+  m_EditorClassIdentifier: 
+  id: Unit_GreenFish
+  displayName: Land Shark
+  unitSprite: {fileID: 21300000, guid: 1c0cca1524700e7458d13c42e38686e4, type: 3}
+  unitColour: {r: 1, g: 1, b: 1, a: 1}
+  description: 
+  startingLevel: 1
+  maxHealthPoint: 45
+  attack: 49
+  specialAttack: 49
+  defence: 65
+  specialDefence: 65
+  speed: 45
+  type1: 4
+  type2: 0
+  isConfused: 0
+  isBound: 0
+  dropMoveList:
+  - {fileID: 11400000, guid: cc24a6da6e443694cb23376356f6e90b, type: 2}
+  - {fileID: 11400000, guid: 63f2e72c35cfc16409e64c8bc12d9cca, type: 2}
+  - {fileID: 11400000, guid: 49580ebc268c9fb469e39c1aeda50066, type: 2}
+  - {fileID: 11400000, guid: be74a4363d7d89841a2d592f0d715df4, type: 2}
+  baseExperience: 64
+  growthRate: 2
+  isBoss: 0

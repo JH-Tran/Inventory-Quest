@@ -30,11 +30,17 @@ public class BattleSystem : MonoBehaviour
     public EncounterSystem encounterSystem;
     //Variables for drop rate
     public InventoryController inventoryController;
+    private bool isBossEnemy = false;
 
-    public void StartBattle(UnitData unitData)
+    public void StartBattle(UnitData unitData, bool isBoss = false, int bossLevelIncrease = 0)
     {
         state = BattleState.START;
         enemyUnit.unitData = unitData;
+        if (isBoss == true)
+        {
+            enemyUnit.AddLevel(bossLevelIncrease);
+        }
+        isBossEnemy = isBoss;
         StartCoroutine(SetUpBattle());
     }
 
@@ -43,7 +49,7 @@ public class BattleSystem : MonoBehaviour
         enemyUnit.SetUnitHealth();
         enemyUnit.RemoveUnitStatusEffect();
         dialogue.text = $"A wild {enemyUnit.unitData.DisplayName} approaches...";
-        Debug.Log($"Player health {playerUnit.currentUnitHealth}");
+        //Debug.Log($"Player health {playerUnit.currentUnitHealth}");
         playerHUD.SetHUD(playerUnit);
         enemyHUD.SetHUD(enemyUnit);
 
@@ -99,16 +105,28 @@ public class BattleSystem : MonoBehaviour
                 UpdateUnitStatusDialogue(playerUnit);
                 yield return new WaitForSeconds(2f);
                 state = BattleState.ENEMYTURN;
-                EnemyTurn();
-                StopCoroutine(nameof(PlayerTurnManager));
+                StartCoroutine(EnemyTurn());
+                yield break;
             }
-            playerUnit.IsUnitDeadFromStatusEffect();
-            if (playerUnit.GetStatusEffectString() != "")
+            else if (playerUnit.GetUnitStatusEffect() == StatusEffect.BURN || playerUnit.GetUnitStatusEffect() == StatusEffect.POISON)
             {
-                playerHUD.SetHP(playerUnit);
-                Debug.Log("Damage Calculated");
-                UpdateUnitStatusDialogue(playerUnit);
-                yield return new WaitForSeconds(2f);
+                if (!playerUnit.IsUnitDeadFromStatusEffect())
+                {
+                    playerHUD.SetHP(playerUnit);
+                    Debug.Log("Player Status Damage Calculated != DEAD");
+                    UpdateUnitStatusDialogue(playerUnit);
+                    yield return new WaitForSeconds(2f);
+                }
+                else
+                {
+                    playerHUD.SetHP(playerUnit);
+                    Debug.Log("Player Status Damage Calculated = DEAD");
+                    UpdateUnitStatusDialogue(playerUnit);
+                    yield return new WaitForSeconds(2f);
+                    state = BattleState.LOST;
+                    EndBattle();
+                    yield break;
+                }
             }
         }
         OnButtonShowActionMenu();
@@ -520,13 +538,14 @@ public class BattleSystem : MonoBehaviour
                 if (!enemyUnit.IsUnitDeadFromStatusEffect())
                 {
                     enemyHUD.SetHP(enemyUnit);
-                    Debug.Log("Damage Calculated");
+                    Debug.Log("Enemy Status Damage Calculated");
                     UpdateUnitStatusDialogue(enemyUnit);
                     yield return new WaitForSeconds(2f);
                 }
                 else
                 {
                     enemyHUD.SetHP(enemyUnit);
+                    Debug.Log("Enemy Status Damage Calculated = DEAD");
                     UpdateUnitStatusDialogue(enemyUnit);
                     yield return new WaitForSeconds(2f);
                     state = BattleState.WON;
@@ -587,11 +606,22 @@ public class BattleSystem : MonoBehaviour
     IEnumerator PlayerExperience()
     {
         yield return new WaitForSeconds(2f);
+        //Experience Gaon
         int baseExperience = enemyUnit.unitData.BaseExperience;
         int enemyLevel = enemyUnit.Level;
         float bossBonus = (enemyUnit.unitData.IsBoss) ? 1.5f : 1f;
         int experienceGain = Mathf.FloorToInt((baseExperience * enemyLevel * bossBonus) / 7);
         dialogue.text = $"{playerUnit.name} has gain {experienceGain} exp";
+        playerUnit.experience += experienceGain;
+        yield return playerHUD.SetExperienceSmooth(playerUnit);
+        //Check for level up
+        while (playerUnit.CheckForLevelUp())
+        {
+            playerHUD.SetLevel(playerUnit);
+            dialogue.text = $"{playerUnit.name} grew {playerUnit.Level}";
+            yield return playerHUD.SetExperienceSmooth(playerUnit, true);
+        }
+        //Enemy Drop items
         StartCoroutine(EnemeyDrop());
 
     }
@@ -599,12 +629,22 @@ public class BattleSystem : MonoBehaviour
     {
         if (state == BattleState.WON)
         {
-            dialogue.text = $"You defeated {enemyUnit.unitData.DisplayName}!";
+            if (isBossEnemy)
+            {
+                dialogue.text = $"{playerUnit.name} has slain {enemyUnit.unitData.DisplayName}!";
+                encounterSystem.AddBossDefeated();
+            }
+            else
+            {
+                dialogue.text = $"{playerUnit.name} defeated {enemyUnit.unitData.DisplayName}!";
+                encounterSystem.AddEnemiesDefeated();
+            }
             StartCoroutine(PlayerExperience());
         }
         else if (state == BattleState.LOST)
         {
-            dialogue.text = $"You were defeated by {enemyUnit.unitData.DisplayName}!";
+            dialogue.text = $"{enemyUnit.unitData.name} deafeated {playerUnit.unitData.DisplayName}!";
+            encounterSystem.AddPlayerDeath();
             StartCoroutine(ReturnToMenu());
         }
     }

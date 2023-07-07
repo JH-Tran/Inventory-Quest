@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: YellowFish
   m_EditorClassIdentifier: 
   id: Unit_RedFish
-  displayName: Yellow Shark
+  displayName: Shocking Shark
   unitSprite: {fileID: 21300000, guid: 6160f2f5cd800f04083a2ab34c54bdf0, type: 3}
   unitColour: {r: 1, g: 1, b: 1, a: 1}
   description: Fastest shark in the sea
@@ -30,5 +30,8 @@ MonoBehaviour:
   isBound: 0
   dropMoveList:
   - {fileID: 11400000, guid: cc24a6da6e443694cb23376356f6e90b, type: 2}
-  - {fileID: 11400000, guid: 8fb4d2fbb79440c4183ec0eaafcba123, type: 2}
-  - {fileID: 11400000, guid: 25639f8a45c46494b95c5896a27dcf16, type: 2}
+  - {fileID: 11400000, guid: b45b6398a04c3324ea705b79b1035267, type: 2}
+  - {fileID: 11400000, guid: 9d4bf38fa71f83746ab52f40001a2066, type: 2}
+  baseExperience: 112
+  growthRate: 1
+  isBoss: 0
