@@ -77,6 +77,10 @@ public class UnitInstance : MonoBehaviour
         currentUnitHealth = maxHp;
         SetUnitHealth();
         experience = GetExperienceForLevel(level);
+        for(int i = 0; i < unitData.MoveList.Count; i++)
+        {
+            moveList[i] = unitData.MoveList[i];
+        }
     }
     public void AddLevel(int level)
     {
@@ -389,9 +393,9 @@ public class UnitInstance : MonoBehaviour
     }
     public MovesData GetRandomMove()
     {
-        int randomNum = Random.Range(0, unitData.DropMoveList.Count);
+        int randomNum = Random.Range(0, unitData.MoveList.Count);
         Debug.Log(randomNum);
-        return unitData.DropMoveList[randomNum];
+        return unitData.MoveList[randomNum];
     }
     public ElementEffectiveness GetMoveEffectiveness()
     {

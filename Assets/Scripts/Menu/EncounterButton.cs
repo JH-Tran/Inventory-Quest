@@ -9,12 +9,20 @@ public class EncounterButton : MonoBehaviour
     [SerializeField] Button encounterButton;
     [SerializeField] Button bossEncounterButton;
     [SerializeField] UnitInstance playerUnitInstance;
-    private int requirementBoss = 10;
+    private int requirementBoss = 5;
 
     public void Update()
     {
-        encounterButton.interactable = playerUnitInstance.currentUnitHealth > 0 ? true : false;
-        encounterButton.interactable = encounterSystem.EnemiesDefeated > requirementBoss ? true : false;
+        if (playerUnitInstance.currentUnitHealth < 0)
+        {
+            encounterButton.interactable = false;
+            bossEncounterButton.interactable = false;
+        }
+        else
+        {
+            encounterButton.interactable = true;
+            bossEncounterButton.interactable = encounterSystem.EnemiesDefeated >= requirementBoss ? true : false;
+        }
     }
 
     public void OnButtonEcounter()

@@ -17,7 +17,7 @@ MonoBehaviour:
   unitSprite: {fileID: 21300000, guid: 5885392ba3eb2f84dbdc7da6bf86b46d, type: 3}
   unitColour: {r: 1, g: 1, b: 1, a: 1}
   description: 
-  startingLevel: 1
+  startingLevel: 3
   maxHealthPoint: 30
   attack: 35
   specialAttack: 30
@@ -28,10 +28,10 @@ MonoBehaviour:
   type2: 0
   isConfused: 0
   isBound: 0
-  dropMoveList:
+  moveList:
   - {fileID: 11400000, guid: 76b0d72cd62c3e34c8fbbc92c056a248, type: 2}
-  - {fileID: 11400000, guid: 2481d954657aafe4eac107038b4ebaab, type: 2}
   - {fileID: 11400000, guid: c39577a344ef88044a2b0ec42e1dccd3, type: 2}
+  - {fileID: 11400000, guid: 2481d954657aafe4eac107038b4ebaab, type: 2}
   baseExperience: 62
   growthRate: 1
   isBoss: 0

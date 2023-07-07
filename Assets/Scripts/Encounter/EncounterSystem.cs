@@ -63,7 +63,7 @@ public class EncounterSystem : MonoBehaviour
         }
         adventureMenuGameObject.SetActive(false);
         battleSystemGameObject.SetActive(true);
-        battleSystemGameObject.GetComponent<BattleSystem>().StartBattle(commonEnemiesList[bossDefeated]);
+        battleSystemGameObject.GetComponent<BattleSystem>().StartBattle(bossEnemiesList[0]);
     }
     public void AddBossDefeated()
     {

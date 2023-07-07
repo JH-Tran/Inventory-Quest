@@ -59,7 +59,7 @@ public class InventoryController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            InsertRandomItemInDropGrid();
+            //InsertRandomItemInDropGrid();
         }
         if (Input.GetKeyDown(KeyCode.R))
         {

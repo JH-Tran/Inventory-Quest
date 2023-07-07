@@ -791,9 +791,9 @@ MonoBehaviour:
   commonEnemiesList:
   - {fileID: 11400000, guid: 596b59db8fbc3e443983ffa4ee6592ce, type: 2}
   - {fileID: 11400000, guid: 60a3a0a4c3163ac4b971e5d6601a7c3e, type: 2}
-  - {fileID: 11400000, guid: 167123164af7597469b77820545caf87, type: 2}
   - {fileID: 11400000, guid: b31bd6cc35a89c64390b98361b6fc8cf, type: 2}
   - {fileID: 11400000, guid: f0fa12f0c28aa354bad11eb9b5f1379e, type: 2}
+  - {fileID: 11400000, guid: 167123164af7597469b77820545caf87, type: 2}
   bossEnemiesList:
   - {fileID: 11400000, guid: a2209f4f1b3a86444b27dbe9a87abb99, type: 2}
   bossCounterText: {fileID: 2127423597}
@@ -1759,8 +1759,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 131.16965, y: -6.7}
-  m_SizeDelta: {x: 60.3974, y: 20.3965}
+  m_AnchoredPosition: {x: 105.032364, y: -7.505}
+  m_SizeDelta: {x: 101.4532, y: 18.786}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &326348358
 MonoBehaviour:
@@ -1789,13 +1789,13 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 5
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 10/20
+  m_Text: 1000/2000hp
 --- !u!222 &326348359
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2251,18 +2251,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2980932965037635668, guid: 304b047784e556e41a4ed988b9458ce5, type: 3}
-      propertyPath: itemDropList.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2980932965037635668, guid: 304b047784e556e41a4ed988b9458ce5, type: 3}
-      propertyPath: itemDropList.Array.data[0]
-      value: 
-      objectReference: {fileID: 6875622647858292641, guid: 0e21c01cb8a2986408c2d75146f9b6d7, type: 3}
-    - target: {fileID: 2980932965037635668, guid: 304b047784e556e41a4ed988b9458ce5, type: 3}
-      propertyPath: itemDropList.Array.data[1]
-      value: 
-      objectReference: {fileID: 4611897730099413699, guid: 835daf62064f93e499523f7f9bff7550, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 304b047784e556e41a4ed988b9458ce5, type: 3}
 --- !u!224 &373420895 stripped
@@ -3445,7 +3433,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Beta Version 0.0.1
+  m_text: Version 0.0.1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7e6bc8e88f41eb44e83f4784b18f001d, type: 2}
   m_sharedMaterial: {fileID: -5172241853357700678, guid: 7e6bc8e88f41eb44e83f4784b18f001d, type: 2}
@@ -3479,8 +3467,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -4246,7 +4234,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 887751207}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 52760320}
+        m_TargetAssemblyTypeName: EncounterSystem, Assembly-CSharp
+        m_MethodName: BossEncounter
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &887751207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7475,8 +7475,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 131.74153, y: -12.990089}
-  m_SizeDelta: {x: 60.3974, y: 20.3965}
+  m_AnchoredPosition: {x: 100.999985, y: -12.990089}
+  m_SizeDelta: {x: 108.1991, y: 20.3965}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1359811275
 MonoBehaviour:
@@ -7505,13 +7505,13 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 5
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 10/20
+  m_Text: 0010/2000hp
 --- !u!222 &1359811276
 CanvasRenderer:
   m_ObjectHideFlags: 0

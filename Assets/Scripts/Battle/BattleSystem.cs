@@ -36,6 +36,7 @@ public class BattleSystem : MonoBehaviour
     {
         state = BattleState.START;
         enemyUnit.unitData = unitData;
+        enemyUnit.Initalise();
         if (isBoss == true)
         {
             enemyUnit.AddLevel(bossLevelIncrease);
@@ -98,10 +99,11 @@ public class BattleSystem : MonoBehaviour
     {
         if (playerUnit.GetUnitStatusEffect() != StatusEffect.NONE)
         {
+            StatusEffect temp = playerUnit.GetUnitStatusEffect();
             Debug.Log("Player has status effect");
             if (playerUnit.IsStatusEffectPassUnitTurn())
             {
-                Debug.Log("Enemy passed their turn");
+                Debug.Log("Player passed their turn");
                 UpdateUnitStatusDialogue(playerUnit);
                 yield return new WaitForSeconds(2f);
                 state = BattleState.ENEMYTURN;
@@ -112,20 +114,29 @@ public class BattleSystem : MonoBehaviour
             {
                 if (!playerUnit.IsUnitDeadFromStatusEffect())
                 {
-                    playerHUD.SetHP(playerUnit);
+                    StartCoroutine(playerHUD.SetHealthSmooth(playerUnit));
                     Debug.Log("Player Status Damage Calculated != DEAD");
                     UpdateUnitStatusDialogue(playerUnit);
                     yield return new WaitForSeconds(2f);
                 }
                 else
                 {
-                    playerHUD.SetHP(playerUnit);
-                    Debug.Log("Player Status Damage Calculated = DEAD");
+                    StartCoroutine(playerHUD.SetHealthSmooth(playerUnit));
                     UpdateUnitStatusDialogue(playerUnit);
+                    Debug.Log("Player Status Damage Calculated = DEAD");
                     yield return new WaitForSeconds(2f);
                     state = BattleState.LOST;
                     EndBattle();
                     yield break;
+                }
+            }
+            else
+            {
+                if (playerUnit.GetStatusEffectString() != "")
+                {
+                    UpdateUnitStatusDialogue(playerUnit);
+                    playerHUD.UpdateStatusEffect(playerUnit);
+                    yield return new WaitForSeconds(2f);
                 }
             }
         }
@@ -167,12 +178,11 @@ public class BattleSystem : MonoBehaviour
         actionMenu.SetActive(false);
         movesMenu.SetActive(false);
     }
-    public void SetDialogueText(bool setActive, string message)
+    public void SetDialogueText(bool setActive = false, string message = "")
     {
         dialogueGamObject.SetActive(setActive);
         dialogue.text = message;
     }
-
     //BETA CONTROLS: Test Moves Effects
     #region Test Player Moves
     public void OnHealButton()
@@ -183,9 +193,9 @@ public class BattleSystem : MonoBehaviour
     }
     IEnumerator PlayerHeal()
     {
-        playerUnit.HealUnit(5);
+        playerUnit.HealUnit(playerUnit.maxHp/5);
 
-        playerHUD.SetHP(playerUnit);
+        StartCoroutine(playerHUD.SetHealthSmooth(playerUnit));
         dialogue.text = "You feel renewed strength!";
 
         yield return new WaitForSeconds(2f);
@@ -256,7 +266,7 @@ public class BattleSystem : MonoBehaviour
                     break;
                 case MoveType.BUFF:
                     Debug.Log("move data: BUFF");
-                    playerUnit.HealUnit(10);
+                    playerUnit.HealUnit(playerUnit.maxHp/4);
                     playerHUD.SetHP(playerUnit);
                     state = BattleState.ENEMYTURN;
                     StartCoroutine(EnemyTurn());
@@ -292,7 +302,7 @@ public class BattleSystem : MonoBehaviour
                     break;
                 case MoveType.BUFF:
                     Debug.Log("move data: BUFF");
-                    playerUnit.HealUnit(5);
+                    enemyUnit.HealUnit(2);
                     state = BattleState.ENEMYTURN;
                     StartCoroutine(EnemyTurn());
                     //Type, status, accuracy
@@ -373,7 +383,7 @@ public class BattleSystem : MonoBehaviour
         {
             enemyHUD.UpdateStatusEffect(enemyUnit);
             playerHUD.UpdateStatusEffect(playerUnit);
-            dialogue.text = $"{unitDefending} has been poisoned!";
+            dialogue.text = $"{unitDefending.unitData.DisplayName} has been poisoned!";
         }
         else
         {
@@ -401,11 +411,11 @@ public class BattleSystem : MonoBehaviour
         {
             enemyHUD.UpdateStatusEffect(enemyUnit);
             playerHUD.UpdateStatusEffect(playerUnit);
-            dialogue.text = $"{unitDefending.name} fell asleep!";
+            dialogue.text = $"{unitDefending.unitData.DisplayName} fell asleep!";
         }
         else
         {
-            if (unitDefending.GetUnitStatusEffect() != StatusEffect.SLEEP)
+            if (unitDefending.GetUnitStatusEffect() == StatusEffect.SLEEP)
             {
                 dialogue.text = $"{unitDefending.unitData.DisplayName} is already asleep!";
             }
@@ -493,8 +503,8 @@ public class BattleSystem : MonoBehaviour
             isDead = unitAttacking.SpecialAttack(unitDefending, moveData.elementalType, moveData.power);
         }
 
-        enemyHUD.SetHP(enemyUnit);
-        playerHUD.SetHP(playerUnit);
+        StartCoroutine(enemyHUD.SetHealthSmooth(enemyUnit));
+        StartCoroutine(playerHUD.SetHealthSmooth(playerUnit));
         yield return new WaitForSeconds(2f);
         ElementEffectiveness MoveEffectivenessToUnitDefending = unitDefending.GetMoveEffectiveness();
         if (MoveEffectivenessToUnitDefending == ElementEffectiveness.SUPEREFFECTIVE)
@@ -522,7 +532,6 @@ public class BattleSystem : MonoBehaviour
 
         if (enemyUnit.GetUnitStatusEffect() != StatusEffect.NONE)
         {
-            //enemyHUD.UpdateStatusEffect(enemyUnit);
             Debug.Log("Enemy Turn has status effect");
             if (enemyUnit.IsStatusEffectPassUnitTurn())
             {
@@ -537,20 +546,29 @@ public class BattleSystem : MonoBehaviour
             {
                 if (!enemyUnit.IsUnitDeadFromStatusEffect())
                 {
-                    enemyHUD.SetHP(enemyUnit);
+                    StartCoroutine(enemyHUD.SetHealthSmooth(enemyUnit));
                     Debug.Log("Enemy Status Damage Calculated");
                     UpdateUnitStatusDialogue(enemyUnit);
                     yield return new WaitForSeconds(2f);
                 }
                 else
                 {
-                    enemyHUD.SetHP(enemyUnit);
+                    StartCoroutine(enemyHUD.SetHealthSmooth(enemyUnit));
                     Debug.Log("Enemy Status Damage Calculated = DEAD");
                     UpdateUnitStatusDialogue(enemyUnit);
                     yield return new WaitForSeconds(2f);
                     state = BattleState.WON;
                     EndBattle();
                     yield break;
+                }
+            }
+            else
+            {
+                if (playerUnit.GetStatusEffectString() != "")
+                {
+                    UpdateUnitStatusDialogue(enemyUnit);
+                    enemyHUD.UpdateStatusEffect(enemyUnit);
+                    yield return new WaitForSeconds(2f);
                 }
             }
         }
@@ -611,14 +629,14 @@ public class BattleSystem : MonoBehaviour
         int enemyLevel = enemyUnit.Level;
         float bossBonus = (enemyUnit.unitData.IsBoss) ? 1.5f : 1f;
         int experienceGain = Mathf.FloorToInt((baseExperience * enemyLevel * bossBonus) / 7);
-        dialogue.text = $"{playerUnit.name} has gain {experienceGain} exp";
+        dialogue.text = $"{playerUnit.unitData.DisplayName} has gain {experienceGain} exp";
         playerUnit.experience += experienceGain;
         yield return playerHUD.SetExperienceSmooth(playerUnit);
         //Check for level up
         while (playerUnit.CheckForLevelUp())
         {
             playerHUD.SetLevel(playerUnit);
-            dialogue.text = $"{playerUnit.name} grew {playerUnit.Level}";
+            dialogue.text = $"{playerUnit.unitData.DisplayName} grew to level {playerUnit.Level}";
             yield return playerHUD.SetExperienceSmooth(playerUnit, true);
         }
         //Enemy Drop items
@@ -631,26 +649,26 @@ public class BattleSystem : MonoBehaviour
         {
             if (isBossEnemy)
             {
-                dialogue.text = $"{playerUnit.name} has slain {enemyUnit.unitData.DisplayName}!";
+                dialogue.text = $"{playerUnit.unitData.DisplayName} has slain {enemyUnit.unitData.DisplayName}!";
                 encounterSystem.AddBossDefeated();
             }
             else
             {
-                dialogue.text = $"{playerUnit.name} defeated {enemyUnit.unitData.DisplayName}!";
+                dialogue.text = $"{playerUnit.unitData.DisplayName} defeated {enemyUnit.unitData.DisplayName}!";
                 encounterSystem.AddEnemiesDefeated();
             }
             StartCoroutine(PlayerExperience());
         }
         else if (state == BattleState.LOST)
         {
-            dialogue.text = $"{enemyUnit.unitData.name} deafeated {playerUnit.unitData.DisplayName}!";
+            dialogue.text = $"{enemyUnit.unitData.DisplayName} deafeated {playerUnit.unitData.DisplayName}!";
             encounterSystem.AddPlayerDeath();
             StartCoroutine(ReturnToMenu());
         }
     }
     private void UpdateUnitStatusDialogue(UnitInstance unitInstance)
     {
-        dialogue.text = $"{unitInstance.GetStatusEffectString()}";
+        SetDialogueText(true, $"{unitInstance.GetStatusEffectString()}");    
     }
     private void PassTurn(bool isDefendingUnitDead)
     {

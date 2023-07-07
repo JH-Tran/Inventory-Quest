@@ -91,9 +91,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitData: {fileID: 11400000, guid: 008ce2a6cdef22d4cb044773694b848c, type: 2}
   currentUnitHealth: 0
-  level: 0
+  experience: 0
+  unitStatusEffect: 0
+  turnDownCount: 0
+  poisonCount: 0
   moveList:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  itemDropList: []

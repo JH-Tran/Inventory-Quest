@@ -91,11 +91,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitData: {fileID: 0}
   currentUnitHealth: 0
+  experience: 0
   unitStatusEffect: 0
   turnDownCount: 0
   poisonCount: 0
-  moveList: []
-  dropMoveList:
-  - {fileID: 11400000, guid: 66b55077018a19e4cbfe657f1e77bb52, type: 2}
+  moveList:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   itemDropList:
-  - itemData: {fileID: 11400000, guid: f46ec82824f22ef44a293bf57aa021ba, type: 2}
+  - {fileID: 6875622647858292641, guid: 0e21c01cb8a2986408c2d75146f9b6d7, type: 3}
+  - {fileID: 4611897730099413699, guid: 835daf62064f93e499523f7f9bff7550, type: 3}

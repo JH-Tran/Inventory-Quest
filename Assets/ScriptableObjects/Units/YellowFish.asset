@@ -17,7 +17,7 @@ MonoBehaviour:
   unitSprite: {fileID: 21300000, guid: 6160f2f5cd800f04083a2ab34c54bdf0, type: 3}
   unitColour: {r: 1, g: 1, b: 1, a: 1}
   description: Fastest shark in the sea
-  startingLevel: 1
+  startingLevel: 3
   maxHealthPoint: 35
   attack: 55
   specialAttack: 40
@@ -28,10 +28,10 @@ MonoBehaviour:
   type2: 0
   isConfused: 0
   isBound: 0
-  dropMoveList:
+  moveList:
   - {fileID: 11400000, guid: cc24a6da6e443694cb23376356f6e90b, type: 2}
-  - {fileID: 11400000, guid: b45b6398a04c3324ea705b79b1035267, type: 2}
   - {fileID: 11400000, guid: 9d4bf38fa71f83746ab52f40001a2066, type: 2}
+  - {fileID: 11400000, guid: b45b6398a04c3324ea705b79b1035267, type: 2}
   baseExperience: 112
   growthRate: 1
   isBoss: 0

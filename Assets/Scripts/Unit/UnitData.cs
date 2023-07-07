@@ -26,7 +26,7 @@ public class UnitData : ScriptableObject
     [SerializeField] bool isConfused;
     [SerializeField] bool isBound;
     //Moves
-    [SerializeField] List<MovesData> dropMoveList = new(4);
+    [SerializeField] List<MovesData> moveList = new(4);
     //Experience
     [SerializeField] int baseExperience;
     [SerializeField] GrowthRate growthRate;
@@ -40,7 +40,7 @@ public class UnitData : ScriptableObject
     public int Speed => speed;
     public string DisplayName => displayName;
     public int StartingLevel => startingLevel;
-    public List<MovesData> DropMoveList => dropMoveList;
+    public List<MovesData> MoveList => moveList;
     public ElementTypes Type1 => type1;
     public ElementTypes Type2 => type2;
     public Sprite UnitSprite => unitSprite;

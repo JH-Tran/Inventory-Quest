@@ -27,7 +27,7 @@ public class BattleHUD : MonoBehaviour
     {
         hpSlider.maxValue = unit.maxHp;
         hpSlider.value = unit.currentUnitHealth;
-        healthText.text = $"{unit.currentUnitHealth}/{unit.maxHp}hp";
+        healthText.text = $"{unit.currentUnitHealth}/{unit.maxHp}";
     }
     public void SetExperience(UnitInstance unit)
     {
@@ -46,6 +46,11 @@ public class BattleHUD : MonoBehaviour
         if (reset == true) { expSlider.normalizedValue = 0; }
         float normalizeExperience = unit.GetNormalizeExperience();
         yield return expSlider.DOValue(normalizeExperience, 1.5f).WaitForCompletion();
+    }
+    public IEnumerator SetHealthSmooth(UnitInstance unit)
+    {
+        yield return hpSlider.DOValue(unit.currentUnitHealth, 1.5f).WaitForCompletion();
+        healthText.text = $"{unit.currentUnitHealth}/{unit.maxHp}";
     }
     public void UpdateStatusEffect(UnitInstance unit)
     {

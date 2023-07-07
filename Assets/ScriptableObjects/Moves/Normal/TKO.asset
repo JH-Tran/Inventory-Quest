@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5becddc874472a49a6a0e4948bf095f, type: 3}
-  m_Name: Hypnosis
+  m_Name: TKO
   m_EditorClassIdentifier: 
-  moveName: Hypnosis
+  moveName: TKO
   description: 
-  moveType: 5
-  power: 0
-  accuracy: 0
-  elementalType: 6
-  statusEffect: 1
-  statusAccuracy: 40
+  moveType: 1
+  power: 160
+  accuracy: 10
+  elementalType: 0
+  statusEffect: 0
+  statusAccuracy: 0
   unitStats: 0
