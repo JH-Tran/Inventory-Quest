@@ -17,7 +17,7 @@ MonoBehaviour:
   moveType: 1
   power: 160
   accuracy: 10
-  elementalType: 0
+  elementalType: 1
   statusEffect: 0
   statusAccuracy: 0
   unitStats: 0

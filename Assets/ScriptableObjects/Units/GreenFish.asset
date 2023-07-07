@@ -17,7 +17,7 @@ MonoBehaviour:
   unitSprite: {fileID: 21300000, guid: 1c0cca1524700e7458d13c42e38686e4, type: 3}
   unitColour: {r: 1, g: 1, b: 1, a: 1}
   description: 
-  startingLevel: 3
+  startingLevel: 2
   maxHealthPoint: 45
   attack: 49
   specialAttack: 49

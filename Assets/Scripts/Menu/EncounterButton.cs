@@ -13,7 +13,7 @@ public class EncounterButton : MonoBehaviour
 
     public void Update()
     {
-        if (playerUnitInstance.currentUnitHealth < 0)
+        if (playerUnitInstance.currentUnitHealth <= 0)
         {
             encounterButton.interactable = false;
             bossEncounterButton.interactable = false;
